@@ -1,0 +1,54 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+
+\title{Gestaltungsprinzipien für Entwickler-Workflows mit KI-Coding-Agenten: Eine Analyse aktueller Forschung}
+
+\author{\IEEEauthorblockN{1\textsuperscript{st} Vorname Nachname}
+\IEEEauthorblockA{\textit{Informatik} \\
+\textit{Duale Hochschule Baden-Württemberg}\\
+Stadt, Deutschland \\
+E-Mail-Adresse}
+\and
+\IEEEauthorblockN{2\textsuperscript{nd} Vorname Nachname}
+\IEEEauthorblockA{\textit{Informatik} \\
+\textit{Duale Hochschule Baden-Württemberg}\\
+Stadt, Deutschland \\
+E-Mail-Adresse}
+\and
+\IEEEauthorblockN{3\textsuperscript{rd} Vorname Nachname}
+\IEEEauthorblockA{\textit{Informatik} \\
+\textit{Duale Hochschule Baden-Württemberg}\\
+Stadt, Deutschland \\
+E-Mail-Adresse}
+}
+
+\maketitle
+
+\begin{abstract}
+KI-gestützte Coding-Agenten wie Claude Code, GitHub Copilot im Agentenmodus oder OpenHands verändern die Softwareentwicklung grundlegend. Statt einzelne Codezeilen vorzuschlagen, planen sie Änderungen selbstständig, führen Werkzeuge aus und bearbeiten ganze Repositories. Damit verschiebt sich die zentrale Herausforderung von der Wahl eines Werkzeugs hin zur Gestaltung des Workflows, in den der Agent eingebettet ist. Während sich die Werkzeuge in kurzen Zyklen weiterentwickeln, fehlt bislang eine systematische Übersicht darüber, welche Gestaltungsprinzipien solcher Workflows sich in der Forschung als wirksam erwiesen haben.
+
+Dieses Short Paper untersucht daher die Forschungsfrage, welche Gestaltungsprinzipien für Entwickler-Workflows mit KI-Coding-Agenten sich aus der aktuellen Forschung ableiten lassen und wie sie sich auf Codequalität und Produktivität auswirken. Grundlage ist eine strukturierte Literaturanalyse von Veröffentlichungen ab 2024 aus Konferenzen der Bereiche Software Engineering, Human-Computer Interaction und Machine Learning, etwa ICSE, FSE, ASE, CHI, NeurIPS und ICLR. Die ausgewählten Arbeiten werden anhand eines gemeinsamen Kategorienschemas ausgewertet, das empirische Nutzerstudien, Benchmark-Evaluationen und Systembeschreibungen agentischer Werkzeuge unterscheidet. So lassen sich Ergebnisse aus kontrollierten Experimenten mit Befunden aus der praktischen Anwendung vergleichen.
+
+Die Analyse gliedert sich in drei Dimensionen. Erstens wird der Autonomiegrad betrachtet. Dabei wird gefragt, wann vollautonome Agenten sinnvoll sind und wann Workflows mit menschlicher Beteiligung überlegen sind, etwa nach dem Muster Planen, Prüfen und Ausführen. Zweitens wird untersucht, wie Kontext und Steuerung, beispielsweise Projektkontextdateien, Spezifikationen, Tests als Leitplanken und standardisierte Werkzeuganbindungen, die Qualität der Ergebnisse beeinflussen. Drittens werden Verfahren der Qualitätssicherung für agentisch erzeugten Code betrachtet, darunter automatisierte Tests, Code-Reviews und Multi-Agenten-Ansätze, sowie typische Fehlermuster von Agenten.
+
+Aus den Befunden werden praxisorientierte Empfehlungen für die Gestaltung agentischer Entwicklungsworkflows abgeleitet. Abschließend diskutiert das Paper Lücken der bisherigen Forschung, insbesondere die begrenzte Aussagekraft gängiger Benchmarks für reale Entwicklungsszenarien, den Mangel an Langzeitstudien zur Wartbarkeit agentisch erzeugten Codes sowie offene Fragen zur Sicherheit und zur veränderten Rolle von Entwicklerinnen und Entwicklern.
+\end{abstract}
+
+\begin{IEEEkeywords}
+KI-Coding-Agenten, Large Language Models, Software Engineering, Entwickler-Workflows, Human-in-the-Loop, Codequalität
+\end{IEEEkeywords}
+
+\end{document}
