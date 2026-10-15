@@ -1,0 +1,71 @@
+# LaTeX-Hilfsdateien
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+*.lb
+*.xdv
+*.dvi
+
+# latexmk / Build-Tools
+*.fdb_latexmk
+*.synctex
+*.synctex.gz
+*.synctex(busy)
+*.synctex.gz(busy)
+*.pdfsync
+*.run.xml
+_minted*/
+build/
+out/
+
+# Bibliographie (BibTeX / Biber)
+*.bbl
+*.bbl-SAVE-ERROR
+*.bcf
+*.bcf-SAVE-ERROR
+*.blg
+*-blx.aux
+*-blx.bib
+
+# Glossare, Indizes, Verzeichnisse
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.glsdefs
+*.ist
+*.idx
+*.ilg
+*.ind
+*.nav
+*.snm
+*.vrb
+*.loa
+*.lol
+*.nlo
+*.nls
+
+# Kompilierte PDFs im Hauptverzeichnis (Abbildungen in Unterordnern bleiben erlaubt)
+/*.pdf
+
+# Editor-Backups / Betriebssystem
+*.bak
+*.sav
+*.tmp
+*~
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
