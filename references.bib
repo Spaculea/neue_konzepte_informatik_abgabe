@@ -1,13 +1,14 @@
 % Gemeinsame Literaturdatenbank. Stil: IEEEtran.
-% Schlüssel: nachnameJAHRstichwort. Angaben vor der Abgabe gegen die Originalquelle prüfen.
+% Schlüssel: nachnameJAHRstichwort. Metadaten am 15.10.2026 über arXiv und Konferenzseiten geprüft.
+% Preprints ohne Venue sind als misc-Eintrag mit arXiv-ID eingetragen.
 
-% --- Einstiegsliteratur (siehe PLAN.md, Abschnitt 3) ---
+% --- Überblick und Agentensysteme ---
 
-@inproceedings{jimenez2024swebench,
-  author    = {Jimenez, Carlos E. and Yang, John and Wettig, Alexander and Yao, Shunyu and Pei, Kexin and Press, Ofir and Narasimhan, Karthik},
-  title     = {{SWE-bench}: Can Language Models Resolve Real-World {GitHub} Issues?},
-  booktitle = {International Conference on Learning Representations (ICLR)},
-  year      = {2024}
+@misc{liu2024agentsurvey,
+  author       = {Liu, Junwei and Wang, Kaixin and Chen, Yixuan and Peng, Xin and Chen, Zhenpeng and Zhang, Lingming and Lou, Yiling},
+  title        = {Large Language Model-Based Agents for Software Engineering: A Survey},
+  howpublished = {arXiv preprint arXiv:2409.02977},
+  year         = {2024}
 }
 
 @inproceedings{yang2024sweagent,
@@ -24,11 +25,123 @@
   year      = {2025}
 }
 
-@misc{xia2024agentless,
-  author       = {Xia, Chunqiu Steven and Deng, Yinlin and Dunn, Soren and Zhang, Lingming},
-  title        = {Agentless: Demystifying {LLM}-based Software Engineering Agents},
-  howpublished = {arXiv preprint arXiv:2407.01489},
-  year         = {2024}
+@inproceedings{zhang2024autocoderover,
+  author    = {Zhang, Yuntong and Ruan, Haifeng and Fan, Zhiyu and Roychoudhury, Abhik},
+  title     = {{AutoCodeRover}: Autonomous Program Improvement},
+  booktitle = {Proceedings of the 33rd ACM SIGSOFT International Symposium on Software Testing and Analysis (ISSTA)},
+  year      = {2024}
+}
+
+% --- Dimension 1: Autonomiegrad und menschliche Beteiligung ---
+
+@inproceedings{xia2025agentless,
+  author    = {Xia, Chunqiu Steven and Deng, Yinlin and Dunn, Soren and Zhang, Lingming},
+  title     = {Demystifying {LLM}-based Software Engineering Agents},
+  booktitle = {Proceedings of the ACM International Conference on the Foundations of Software Engineering (FSE)},
+  year      = {2025},
+  note      = {Preprint: arXiv:2407.01489 (Agentless)}
+}
+
+@inproceedings{takerngsaksiri2025hula,
+  author    = {Takerngsaksiri, Wannita and others},
+  title     = {Human-In-the-Loop Software Development Agents},
+  booktitle = {Proceedings of the 47th International Conference on Software Engineering: Software Engineering in Practice (ICSE-SEIP)},
+  year      = {2025}
+}
+
+@misc{chen2025codewithme,
+  author       = {Chen, Valerie and Talwalkar, Ameet and Brennan, Robert and Neubig, Graham},
+  title        = {Code with Me or for Me? {How} Increasing {AI} Automation Transforms Developer Workflows},
+  howpublished = {arXiv preprint arXiv:2507.08149},
+  year         = {2025}
+}
+
+@misc{dhanorkar2026oversight,
+  author       = {Dhanorkar, Shipi and Passi, Samir and Vorvoreanu, Mihaela},
+  title        = {Human Oversight of Agentic Systems in Practice: Examining the Oversight Work, Challenges, and Heuristics of Developers Using Software Agents},
+  howpublished = {arXiv preprint arXiv:2606.05391},
+  year         = {2026}
+}
+
+% --- Dimension 2: Kontext und Steuerung ---
+
+@inproceedings{chatlatanagulchai2025manifests,
+  author    = {Chatlatanagulchai, Worawalan and Thonglek, Kundjanasith and Reid, Brittany and Kashiwa, Yutaro and Leelaprute, Pattara and Rungsawang, Arnon and Manaskasemsak, Bundit and Iida, Hajimu},
+  title     = {On the Use of Agentic Coding Manifests: An Empirical Study of {Claude Code}},
+  booktitle = {Proceedings of the 26th International Conference on Product-Focused Software Process Improvement (PROFES)},
+  year      = {2025},
+  doi       = {10.1007/978-3-032-12089-2_40}
+}
+
+@inproceedings{mohsenimofidi2026context,
+  author    = {Mohsenimofidi, Seyedmoein and Galster, Matthias and Treude, Christoph and Baltes, Sebastian},
+  title     = {Context Engineering for {AI} Agents in Open-Source Software},
+  booktitle = {Proceedings of the 23rd IEEE/ACM International Conference on Mining Software Repositories (MSR)},
+  year      = {2026},
+  note      = {Preprint: arXiv:2510.21413}
+}
+
+@inproceedings{gloaguen2026agentsmd,
+  author    = {Gloaguen, Thibaud and M{\"u}ndler, Niels and M{\"u}ller, Mark and Raychev, Veselin and Vechev, Martin},
+  title     = {Evaluating {AGENTS.md}: Are Repository-Level Context Files Helpful for Coding Agents?},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2026},
+  note      = {Preprint: arXiv:2602.11988}
+}
+
+% --- Dimension 3: Qualitätssicherung und Fehlermuster ---
+
+@misc{huang2023agentcoder,
+  author       = {Huang, Dong and Zhang, Jie M. and Luck, Michael and Bu, Qingwen and Qing, Yuhao and Cui, Heming},
+  title        = {{AgentCoder}: Multi-Agent-based Code Generation with Iterative Testing and Optimisation},
+  howpublished = {arXiv preprint arXiv:2312.13010},
+  year         = {2023}
+}
+
+@inproceedings{cemri2025mast,
+  author    = {Cemri, Mert and others},
+  title     = {Why Do Multi-Agent {LLM} Systems Fail?},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2025},
+  note      = {Preprint: arXiv:2503.13657}
+}
+
+@misc{sajadi2025patchsecurity,
+  author       = {Sajadi, Amirali and Damevski, Kostadin and Chatterjee, Preetha},
+  title        = {How Safe Are {AI}-Generated Patches? {A} Large-scale Study on Security Risks in {LLM} and Agentic Automated Program Repair on {SWE-bench}},
+  howpublished = {arXiv preprint arXiv:2507.02976},
+  year         = {2025}
+}
+
+% --- Praxis und Produktivität ---
+
+@misc{watanabe2025agenticprs,
+  author       = {Watanabe, Miku and Li, Hao and Kashiwa, Yutaro and Reid, Brittany and Iida, Hajimu and Hassan, Ahmed E.},
+  title        = {On the Use of Agentic Coding: An Empirical Study of Pull Requests on {GitHub}},
+  howpublished = {arXiv preprint arXiv:2509.14745},
+  year         = {2025}
+}
+
+@misc{li2025aidev,
+  author       = {Li, Hao and Zhang, Haoxiang and Hassan, Ahmed E.},
+  title        = {The Rise of {AI} Teammates in Software Engineering ({SE}) 3.0: How Autonomous Coding Agents Are Reshaping Software Engineering},
+  howpublished = {arXiv preprint arXiv:2507.15003},
+  year         = {2025}
+}
+
+@misc{robbes2026agenticmuch,
+  author       = {Robbes, Romain and Matricon, Th{\'e}o and Degueule, Thomas and Hora, Andre and Zacchiroli, Stefano},
+  title        = {Agentic Much? {Adoption} of Coding Agents on {GitHub}},
+  howpublished = {arXiv preprint arXiv:2601.18341},
+  year         = {2026}
+}
+
+@article{cui2025genai,
+  author  = {Cui, Kevin Zheyuan and Demirer, Mert and Jaffe, Sonia and Musolff, Leon and Peng, Sida and Salz, Tobias},
+  title   = {The Effects of Generative {AI} on High-Skilled Work: Evidence from Three Field Experiments with Software Developers},
+  journal = {Management Science},
+  year    = {2025},
+  doi     = {10.1287/mnsc.2025.00535}
 }
 
 @misc{becker2025metr,
@@ -38,4 +151,26 @@
   year         = {2025}
 }
 
-% --- Eingeschlossene Arbeiten aus der Literaturanalyse ---
+% --- Benchmarks und deren Grenzen ---
+
+@inproceedings{jimenez2024swebench,
+  author    = {Jimenez, Carlos E. and Yang, John and Wettig, Alexander and Yao, Shunyu and Pei, Kexin and Press, Ofir and Narasimhan, Karthik},
+  title     = {{SWE-bench}: Can Language Models Resolve Real-World {GitHub} Issues?},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2024}
+}
+
+@misc{aleithan2024swebenchplus,
+  author       = {Aleithan, Reem and Xue, Haoran and Mohajer, Mohammad Mahdi and Nnorom, Elijah and Uddin, Gias and Wang, Song},
+  title        = {{SWE-Bench+}: Enhanced Coding Benchmark for {LLMs}},
+  howpublished = {arXiv preprint arXiv:2410.06992},
+  year         = {2024}
+}
+
+@inproceedings{wang2026solvedissues,
+  author    = {Wang, You and Pradel, Michael and Liu, Zhongxin},
+  title     = {Are ``Solved Issues'' in {SWE-bench} Really Solved Correctly? {An} Empirical Study},
+  booktitle = {Proceedings of the 48th International Conference on Software Engineering (ICSE)},
+  year      = {2026},
+  note      = {Preprint: arXiv:2503.15223}
+}
