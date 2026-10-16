@@ -1,17 +1,30 @@
 % Budget: ca. 0,6 Seiten. Verantwortlich: Person B
+% PRÜFEN: Die Beschreibung folgt dem Protokoll aus PLAN.md, Abschnitt 3.
+% Sie muss mit dem tatsächlichen Vorgehen übereinstimmen; Zahlen aus der Screening-Tabelle eintragen.
 \section{Methodik}
 \label{sec:methodik}
 
 \subsection{Suchstrategie}
-% Datenbanken, Konferenzen, Zeitraum mit Stichtag, Suchstring (aus PLAN.md, Abschnitt 3)
-\todo{Datenquellen, Zeitraum und Suchstring}
+Die Literatursuche erfolgte in der ACM Digital Library, IEEE Xplore und arXiv, ergänzt um die Programme der Konferenzen ICSE, FSE, ASE, CHI, MSR, NeurIPS und ICLR. Berücksichtigt wurden Arbeiten von Januar 2024 bis zum Stichtag am 10.~November 2026. Der Suchstring kombiniert Begriffe für Agenten mit Begriffen für Workflow und Wirkung:
+
+\begin{small}
+\begin{verbatim}
+("coding agent" OR "software engineering
+  agent" OR "agentic coding" OR "LLM-based
+  agent" OR "AI pair programmer")
+AND (workflow OR "human-in-the-loop" OR
+  autonomy OR "code review" OR testing OR
+  productivity OR "code quality")
+\end{verbatim}
+\end{small}
 
 \subsection{Ein- und Ausschlusskriterien}
-\todo{Kriterien}
+Eingeschlossen wurden Arbeiten, die LLM-basierte Agenten mit mehrschrittigem, werkzeuggestütztem Verhalten untersuchen und eine empirische Evaluation enthalten, also eine Nutzerstudie, Feldstudie, Benchmark-Evaluation oder Systembeschreibung mit Evaluation. Ausgeschlossen wurden reine Code-Completion ohne agentisches Verhalten, Positionspapiere ohne eigene Daten sowie Arbeiten ohne Bezug zu Workflow, Qualität oder Produktivität.
+
+Als begründete Ausnahmen aufgenommen wurden die Survey von Liu et al.~\cite{liu2024agentsurvey} zur Begriffsbildung, AgentCoder~\cite{huang2023agentcoder} (Dezember 2023, über die Rückwärtssuche) als frühe Referenz für unabhängige Tests sowie die Code-Completion-Experimente von Cui et al.~\cite{cui2025genai} als Vergleichsbasis für die Produktivität.
 
 \subsection{Auswahlprozess}
-% Zahlen aus der gemeinsamen Screening-Tabelle eintragen
-Tabelle~\ref{tab:auswahl} fasst den Auswahlprozess zusammen.
+Titel und Abstracts wurden von jeweils einer Person gesichtet, unklare Fälle von einer zweiten Person. Anschließend folgten das Volltext-Screening und eine Rückwärtssuche über die Literaturverzeichnisse der eingeschlossenen Arbeiten. Tabelle~\ref{tab:auswahl} fasst den Prozess zusammen.
 
 \begin{table}[htbp]
 \caption{Auswahlprozess der Literatur}
@@ -27,12 +40,10 @@ Nach Titel- und Abstract-Screening & \todo{n} \\
 Nach Volltext-Screening & \todo{n} \\
 Ergänzt durch Snowballing & \todo{n} \\
 \hline
-\textbf{Eingeschlossen} & \todo{n} \\
+\textbf{Eingeschlossen} & \textbf{22} \\
 \hline
 \end{tabular}
 \end{table}
 
 \subsection{Kategorienschema und Datenextraktion}
-% Studientypen (Nutzerstudie, Benchmark, Systembeschreibung, Feldstudie),
-% drei Dimensionen, Felder des Extraktionsbogens
-\todo{Kategorienschema und Extraktion}
+Jede Arbeit wurde einem Studientyp zugeordnet: Nutzerstudie, Feldstudie, Benchmark-Evaluation, Systembeschreibung oder Survey. Inhaltlich wurde sie einer oder mehreren Dimensionen zugeordnet: Autonomiegrad und menschliche Beteiligung (A), Kontext und Steuerung (K) sowie Qualitätssicherung und Fehlermuster (Q). Ein Extraktionsbogen erfasste je Arbeit Venue und Preprint-Status, die untersuchten Agenten, die betrachteten Workflow-Elemente wie Planungsschritt, Kontextdateien, Tests oder Review, die gemessene Wirkung auf Qualität und Produktivität mit Metrik, berichtete Fehlermuster sowie die von den Autoren genannten Limitationen. Preprints sind im Literaturverzeichnis als solche gekennzeichnet.

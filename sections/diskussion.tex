@@ -3,12 +3,11 @@
 \label{sec:diskussion}
 
 \subsection{Forschungslücken}
-% Begrenzte Aussagekraft von Benchmarks für reale Entwicklung,
-% fehlende Langzeitstudien zur Wartbarkeit, Sicherheit, veränderte Rolle von Entwicklerinnen und Entwicklern.
-% Produktivitätsbefunde aus Feldstudien, z.B.~\cite{becker2025metr}, mit Benchmark-Ergebnissen kontrastieren.
-\todo{Forschungslücken}
+\textit{Benchmarks und Praxis.} Die meisten Systeme werden auf SWE-bench bewertet, dessen Ergebnisse durch Lösungen im Issue, schwache Tests und unvollständige Testausführung überhöht sind~\cite{aleithan2024swebenchplus,wang2026solvedissues}. Feldstudien zeigen dagegen geringere Akzeptanz~\cite{li2025aidev} und teils Verlangsamung~\cite{becker2025metr}. Zudem vergleicht kaum eine Studie Workflow-Varianten wie Plan-Freigabe gegenüber direkter Ausführung im selben Setting; P1 bis P5 beruhen daher überwiegend auf indirekter Evidenz.
+
+\textit{Langzeitfolgen.} Alle Studien sind Momentaufnahmen; Folgen für Wartbarkeit, technische Schuld und Kompetenzerhalt sind ebenso offen wie der Einfluss von Kontextdateien auf die Einhaltung von Konventionen.
+
+\textit{Sicherheit und Rolle der Entwickler.} Nur eine Arbeit untersucht die Sicherheit von Agenten-Patches systematisch~\cite{sajadi2025patchsecurity}. Gleichzeitig verschiebt sich die Rolle der Entwickler zum Beaufsichtigen von Agenten~\cite{dhanorkar2026oversight}, ohne dass geklärt ist, wie wirksame Aufsicht unter Zeitdruck gelingt.
 
 \subsection{Grenzen dieser Arbeit}
-% Threats to Validity: Auswahl der Datenbanken, Preprints, kurzer Zeitraum,
-% schnelle Weiterentwicklung der Werkzeuge, Screening durch wenige Personen
-\todo{Grenzen der Analyse}
+Die Analyse umfasst 22 Arbeiten aus einem schnell wachsenden Feld, neun davon Preprints ohne Begutachtung. Ergebnisse mit Modellen von 2024 sind nur eingeschränkt auf heutige Agenten übertragbar. Viele Befunde stammen aus Python-Projekten und Open Source, industrielle Daten liefern nur wenige Arbeiten~\cite{takerngsaksiri2025hula,cui2025genai,dhanorkar2026oversight}. Mehrere Studien entstanden unter Beteiligung von Unternehmen oder der Entwickler des untersuchten Werkzeugs~\cite{chen2025codewithme,takerngsaksiri2025hula,dhanorkar2026oversight}. Da ein kleines Team sichtete und extrahierte, können relevante Arbeiten fehlen.

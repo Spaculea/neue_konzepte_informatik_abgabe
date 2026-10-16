@@ -3,11 +3,37 @@
 \section{Gestaltungsprinzipien}
 \label{sec:prinzipien}
 
-Aus den Ergebnissen in Abschnitt~\ref{sec:ergebnisse} lassen sich folgende Gestaltungsprinzipien ableiten:
+Aus den Ergebnissen in Abschnitt~\ref{sec:ergebnisse} lassen sich fünf Gestaltungsprinzipien ableiten. Abbildung~\ref{fig:workflow} ordnet sie den Phasen eines agentischen Workflows zu.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  node distance=1.4mm,
+  box/.style={draw, rounded corners=2pt, minimum width=0.86\columnwidth, minimum height=4.4mm, font=\footnotesize, align=center},
+  arr/.style={-{Stealth[length=1.6mm]}, thick}]
+\node[box] (k) {Kontext und Aufgabe vorbereiten \hfill \textbf{P3}};
+\node[box, below=of k] (p) {Planen und Plan freigeben \hfill \textbf{P1, P2}};
+\node[box, below=of p] (a) {Ausführen in isolierter Umgebung \hfill \textbf{P2}};
+\node[box, below=of a] (v) {Automatisch verifizieren (Linter, Tests, Ziel) \hfill \textbf{P4}};
+\node[box, below=of v] (r) {Review, Sicherheitsprüfung, kleiner PR \hfill \textbf{P5}};
+\draw[arr] (k) -- (p);
+\draw[arr] (p) -- (a);
+\draw[arr] (a) -- (v);
+\draw[arr] (v) -- (r);
+\draw[arr] (v.east) -- ++(3mm,0) |- node[pos=0.25, right, font=\scriptsize]{Fehler} (a.east);
+\end{tikzpicture}
+\caption{Agentischer Workflow mit Zuordnung der Gestaltungsprinzipien}
+\label{fig:workflow}
+\end{figure}
 
 \begin{enumerate}
-\item[\textbf{P1}] \textbf{\todo{Name}:} \todo{Prinzip, Begründung, Quellen}
-\item[\textbf{P2}] \textbf{\todo{Name}:} \todo{Prinzip, Begründung, Quellen}
-\item[\textbf{P3}] \textbf{\todo{Name}:} \todo{Prinzip, Begründung, Quellen}
-\item[\textbf{P4}] \textbf{\todo{Name}:} \todo{Prinzip, Begründung, Quellen}
+\item[\textbf{P1}] \textbf{Planen vor Ausführen:} Der Agent erstellt zuerst einen Plan, den der Mensch prüft und korrigiert, bevor Code entsteht. Freigegebene Pläne und menschliches Feedback verbessern den Kontext~\cite{takerngsaksiri2025hula}, gemeinsame Planung ist bereits gelebte Praxis~\cite{dhanorkar2026oversight}, und feste Phasen erhöhen die Kontrolle~\cite{xia2025agentless}. \textit{Wirkung:} geringerer Einstiegsaufwand, frühes Erkennen von Fehlrichtungen. Der Plan ersetzt jedoch nicht das Review des Codes~\cite{dhanorkar2026oversight}.
+
+\item[\textbf{P2}] \textbf{Autonomie nach Aufgabe und Risiko staffeln:} Hohe Autonomie eignet sich für Dokumentation, Tests, Refactoring und unbekannte Codebasen, enge Führung für dateiübergreifende Features, Bugfixes und sicherheitsrelevanten Code. Belegt wird dies durch die höhere Akzeptanz bei Dokumentation~\cite{li2025aidev}, den Nutzen bei unbekanntem Code~\cite{chen2025codewithme}, die Verlangsamung in vertrauten Großprojekten~\cite{becker2025metr} und das höhere Sicherheitsrisiko bei mehr Autonomie~\cite{sajadi2025patchsecurity}. Ausführung in einer Sandbox begrenzt die Folgen von Fehlern~\cite{wang2025openhands}.
+
+\item[\textbf{P3}] \textbf{Kontext knapp und aufgabenbezogen:} Kontextdateien enthalten nur, was nicht im Code oder README steht, etwa Konventionen, Verbote und Build-Befehle, und werden von Menschen gepflegt~\cite{gloaguen2026agentsmd,mohsenimofidi2026context}. Die Aufgabenbeschreibung nennt erwartetes Verhalten und Reproduktionsschritte~\cite{takerngsaksiri2025hula,sajadi2025patchsecurity}. \textit{Wirkung:} Anweisungen werden befolgt, ein Effekt auf die Lösungsrate ist jedoch nicht belegt, und die Kosten steigen. Das Prinzip ist hinsichtlich der Produktivität daher schwach belegt.
+
+\item[\textbf{P4}] \textbf{Mehrstufige automatische Verifikation:} Linter und Tests laufen nach jeder Änderung~\cite{yang2024sweagent}, Tests entstehen unabhängig vom generierten Code~\cite{huang2023agentcoder}, die vollständige Testsuite wird ausgeführt~\cite{wang2026solvedissues}, und ein abschließender Schritt prüft das übergeordnete Ziel~\cite{cemri2025mast}. \textit{Wirkung:} höhere Korrektheit und weniger Nacharbeit bei höherer Laufzeit. Schwache Tests begrenzen den Nutzen~\cite{aleithan2024swebenchplus}.
+
+\item[\textbf{P5}] \textbf{Verbindliches Review kleiner, nachvollziehbarer Änderungen:} Agentencode durchläuft ein menschliches Review und eine statische Sicherheitsanalyse und wird als solcher gekennzeichnet. Kleine Pull Requests erleichtern das Review~\cite{watanabe2025agenticprs}, viele geänderte Dateien erhöhen das Risiko~\cite{sajadi2025patchsecurity}, und fehlende Reviews und Urheberangaben sind verbreitet~\cite{li2025aidev}. \textit{Wirkung:} höhere Qualität und Sicherheit auf Kosten von Review-Aufwand. Hier liegt der zentrale Zielkonflikt zwischen Qualität und Produktivität.
 \end{enumerate}
