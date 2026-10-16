@@ -3,43 +3,68 @@
 \section{Ergebnisse}
 \label{sec:ergebnisse}
 
-% Überblick: Verteilung der Arbeiten nach Studientyp, Jahr und Venue
-\todo{Überblick über die eingeschlossenen Arbeiten}
-Tabelle~\ref{tab:uebersicht} ordnet die Arbeiten den drei Dimensionen zu.
+Die 22 Arbeiten umfassen sieben Feldstudien, sechs Systembeschreibungen, sechs Benchmark-Evaluationen, zwei Nutzerstudien und eine Survey. Eine stammt aus 2023, fünf aus 2024, elf aus 2025 und fünf aus 2026. Neun lagen zum Stichtag nur als Preprint vor. Tabelle~\ref{tab:uebersicht} ordnet sie den drei Dimensionen zu.
 
-\begin{table*}[htbp]
-\caption{Übersicht der eingeschlossenen Arbeiten}
+\begin{table*}[t]
+\caption{Übersicht der eingeschlossenen Arbeiten. Dimension: A = Autonomie, K = Kontext, Q = Qualitätssicherung, H = Hintergrund bzw.\ Vergleich. Wirkung auf Qualität (Qu.) und Produktivität (Pr.): + positiv, $-$ negativ, $\pm$ gemischt, $\circ$ kein signifikanter Effekt, -- nicht gemessen.}
 \label{tab:uebersicht}
 \centering
-\begin{tabular}{llllp{6cm}}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llcccl}
 \hline
-\textbf{Arbeit} & \textbf{Studientyp} & \textbf{Dimension} & \textbf{Wirkung auf} & \textbf{Zentraler Befund} \\
+\textbf{Arbeit} & \textbf{Studientyp} & \textbf{Dim.} & \textbf{Qu.} & \textbf{Pr.} & \textbf{Zentraler Befund} \\
 \hline
-\todo{Quelle} & \todo{Typ} & \todo{A/K/Q} & \todo{Qualität/Produktivität} & \todo{Befund} \\
+Liu et al.~\cite{liu2024agentsurvey} & Survey & H & -- & -- & 124 Arbeiten; Agenten übertreffen reine LLMs durch Rückmeldung der Umgebung \\
+Yang et al.~\cite{yang2024sweagent} & System & K, Q & + & -- & Agentengerechte Schnittstelle: +10,7 Prozentpunkte; Linter als Leitplanke \\
+Wang et al.~\cite{wang2025openhands} & System & H & -- & -- & Offene Plattform mit Sandbox; 26\,\% auf SWE-bench Lite \\
+Zhang et al.~\cite{zhang2024autocoderover} & System & K, Q & $\pm$ & + & 19\,\% in ca.\ 4 min je Issue; nur 65\,\% der testbestehenden Patches korrekt \\
+Xia et al.~\cite{xia2025agentless} & System & A & + & + & Fester Ablauf ohne Autonomie: 32\,\%, günstiger als komplexe Agenten \\
+Takerngsaksiri et al.~\cite{takerngsaksiri2025hula} & System/Feld & A, K & $\pm$ & + & Human-in-the-Loop: 82\,\% der Pläne freigegeben, 59\,\% der PRs gemergt \\
+Chen et al.~\cite{chen2025codewithme} & Nutzerstudie & A & + & + & Agent vs.\ Copilot: +35\,\% Korrektheit bei etwa halbem Aufwand \\
+Dhanorkar et al.~\cite{dhanorkar2026oversight} & Nutzerstudie & A, Q & $-$ & -- & 17 Interviews: vier Formen der Aufsicht, riskante Prüfheuristiken \\
+Chatlatanagulchai et al.~\cite{chatlatanagulchai2025manifests} & Feldstudie & K & -- & -- & 253 CLAUDE.md: vor allem Build-Befehle, Implementierung, Architektur \\
+Mohsenimofidi et al.~\cite{mohsenimofidi2026context} & Feldstudie & K & -- & -- & 5\,\% von 10.000 Projekten mit Kontextdatei; keine feste Struktur \\
+Gloaguen et al.~\cite{gloaguen2026agentsmd} & Benchmark & K & $\circ$ & $-$ & Kontextdateien: Lösungsrate unverändert, Kosten über 20\,\% höher \\
+Huang et al.~\cite{huang2023agentcoder} & System & Q & + & + & Unabhängig erzeugte Tests: 96,3\,\% auf HumanEval mit weniger Tokens \\
+Cemri et al.~\cite{cemri2025mast} & Benchmark & Q & $-$ & -- & 14 Fehlermodi in 1.642 Traces; Prüfung gegen das Ziel +15,6\,\% \\
+Sajadi et al.~\cite{sajadi2025patchsecurity} & Benchmark & A, K, Q & $-$ & -- & 11-mal mehr Schwachstellen als Entwickler; mehr Autonomie, mehr Risiko \\
+Watanabe et al.~\cite{watanabe2025agenticprs} & Feldstudie & Q & $\pm$ & + & 83,8\,\% der Claude-Code-PRs gemergt (Menschen 91,0\,\%), oft nachbearbeitet \\
+Li et al.~\cite{li2025aidev} & Feldstudie & Q & $-$ & + & 456.000 Agenten-PRs: geringere Akzeptanz außer bei Dokumentation \\
+Robbes et al.~\cite{robbes2026agenticmuch} & Feldstudie & H & -- & -- & 22--29\,\% von 128.018 GitHub-Projekten nutzen Coding-Agenten \\
+Cui et al.~\cite{cui2025genai} & Feldstudie & H & -- & + & Code-Completion (Vergleich): +26\,\% erledigte Aufgaben \\
+Becker et al.~\cite{becker2025metr} & Feldstudie & K & $\circ$ & $-$ & Erfahrene Entwickler mit KI 19\,\% langsamer, gefühlt 20\,\% schneller \\
+Jimenez et al.~\cite{jimenez2024swebench} & Benchmark & H & -- & -- & 2.294 reale GitHub-Issues mit Prüfung über Tests \\
+Aleithan et al.~\cite{aleithan2024swebenchplus} & Benchmark & Q & $-$ & -- & Lösungen im Issue, schwache Tests; Lösungsrate fällt von 12,5 auf 4,0\,\% \\
+Wang et al.~\cite{wang2026solvedissues} & Benchmark & Q & $-$ & -- & 29,6\,\% plausibler Patches weichen ab; Raten um 6,4 Prozentpunkte überhöht \\
 \hline
 \end{tabular}
 \end{table*}
 
 \subsection{Autonomiegrad und menschliche Beteiligung}
 \label{sec:ergebnisse-autonomie}
-% Wann sind vollautonome Agenten sinnvoll, wann Human-in-the-Loop überlegen?
-% Muster Planen, Prüfen, Ausführen
-\todo{Befunde zur Qualität}
 
-\todo{Befunde zur Produktivität}
+\textit{Qualität.} Mehr Autonomie führt nicht automatisch zu besseren Ergebnissen. Agentless, ein fester Ablauf aus Lokalisierung, Reparatur und Validierung, übertraf komplexe autonome Agenten bei geringeren Kosten~\cite{xia2025agentless}, da deren 30 bis 40 Schritte pro Aufgabe kaum kontrollierbar sind. Unter drei Agenten-Frameworks erzeugte das System mit der weitestgehenden Kontrolle über die Codebasis eine Größenordnung mehr Schwachstellen als die übrigen~\cite{sajadi2025patchsecurity}. Menschliche Freigaben wirken dem entgegen: Im industriellen Einsatz von HULA wurden 82\,\% der Pläne freigegeben, die Codequalität blieb aber teils ein Problem, und nur 59\,\% der eröffneten Pull Requests wurden gemergt~\cite{takerngsaksiri2025hula}. Aufsicht findet vor, während und nach der Ausführung statt, im Alltag jedoch gestützt auf Heuristiken, etwa den Plan als Abbild der Umsetzung oder Vertrauen in unbekannten Domänen~\cite{dhanorkar2026oversight}.
+
+\textit{Produktivität.} Mit einem Agenten lösten Teilnehmende 35\,\% mehr Aufgaben korrekt als mit einem Copilot, bei etwa halbem Zeitaufwand~\cite{chen2025codewithme}. Der Gewinn entstand vor allem bei unbekannten Codebasen; zugleich verstanden die Teilnehmenden das Vorgehen des Agenten oft nicht. Auch HULA wurde als zeitsparend wahrgenommen~\cite{takerngsaksiri2025hula}.
 
 \subsection{Kontext und Steuerung}
 \label{sec:ergebnisse-kontext}
-% Projektkontextdateien, Spezifikationen, Tests als Leitplanken, standardisierte Werkzeuganbindungen
-\todo{Befunde zur Qualität}
 
-\todo{Befunde zur Produktivität}
+\textit{Qualität.} Kontextdateien wie CLAUDE.md oder AGENTS.md folgen keinem festen Schema und enthalten vor allem Build- und Testbefehle, Konventionen und Architektur~\cite{chatlatanagulchai2025manifests,mohsenimofidi2026context}. Sicherheitsthemen fehlen meist, und die Hälfte der AGENTS.md-Dateien wurde nie geändert~\cite{mohsenimofidi2026context}. Die einzige kontrollierte Evaluation fand keinen signifikanten Effekt auf die Lösungsrate~\cite{gloaguen2026agentsmd}. Von Hand geschriebene Dateien schnitten signifikant besser ab als generierte; die Anweisungen wurden befolgt, Repository-Übersichten halfen aber nicht. Auch sonst schadet zu viel Kontext: Ein Dateiausschnitt von 100 Zeilen war wirksamer als die ganze Datei~\cite{yang2024sweagent}. Wichtiger ist die Aufgabenbeschreibung. Kurze Issues senkten die Leistung~\cite{takerngsaksiri2025hula}, unvollständige führten zu überangepassten Patches~\cite{zhang2024autocoderover}, fehlende Reproduktionsschritte zu mehr Schwachstellen~\cite{sajadi2025patchsecurity}.
+
+\textit{Produktivität.} Kontextdateien erhöhten Schrittzahl und Inferenzkosten um über 20\,\%~\cite{gloaguen2026agentsmd}. Erfahrene Entwickler nannten fehlendes implizites Projektwissen als Grund für ihre Verlangsamung~\cite{becker2025metr}.
 
 \subsection{Qualitätssicherung und Fehlermuster}
 \label{sec:ergebnisse-qs}
-% Automatisierte Tests, Code-Reviews, Multi-Agenten-Ansätze; typische Fehlermuster von Agenten
-\todo{Befunde zur Qualität}
 
-\todo{Befunde zur Produktivität}
+\textit{Qualität.} Ausführbare Prüfungen verbessern die Ergebnisse: ein Linter, der fehlerhafte Änderungen verwirft~\cite{yang2024sweagent}, Tests, die getrennt vom Code aus der Anforderung entstehen~\cite{huang2023agentcoder}, und ein Prüfschritt gegen das übergeordnete Ziel, der die Erfolgsrate um 15,6\,\% steigerte~\cite{cemri2025mast}. Bestandene Tests garantieren jedoch keine Korrektheit. Nur 65\,\% der testbestehenden Patches von AutoCodeRover waren korrekt~\cite{zhang2024autocoderover}. In SWE-bench stand bei 33\,\% der erfolgreichen Patches die Lösung schon im Issue, bei weiteren 31\,\% waren die Tests zu schwach~\cite{aleithan2024swebenchplus}, und 29,6\,\% der plausiblen Patches verhalten sich anders als die Referenz~\cite{wang2026solvedissues}. In der Praxis werden Agenten-PRs außer bei Dokumentation seltener angenommen als menschliche~\cite{li2025aidev}, und 45\,\% der gemergten Claude-Code-PRs brauchten Nacharbeit, meist für Projektkonventionen~\cite{watanabe2025agenticprs}.
 
-\todo{Typische Fehlermuster}
+\textit{Produktivität.} Agenten erhöhen den Durchsatz stark. Angenommene Codex-PRs wurden im Median nach 0,3 statt 3,9 Stunden geschlossen, und 58\,\% der Agenten-PRs erhielten kein explizites Review, was auf geringe Prüftiefe hindeutet~\cite{li2025aidev}. Die nötige Nacharbeit ist nicht größer als bei menschlichen PRs~\cite{watanabe2025agenticprs}.
+
+\textit{Fehlermuster.} Die Taxonomie MAST unterscheidet Fehler im Systemdesign (44\,\%), Fehlabstimmung zwischen Agenten (32\,\%) und unzureichende Verifikation (24\,\%), oft nur eine Prüfung, ob der Code kompiliert~\cite{cemri2025mast}. Hinzu kommen Patches, die nur den im Issue genannten Fall beheben~\cite{zhang2024autocoderover} oder mehr Verhalten ändern als nötig~\cite{wang2026solvedissues}, und Sicherheitslücken anderer Art als bei Menschen, etwa Eval-Injection~\cite{sajadi2025patchsecurity}.
+
+\subsection{Übergreifende Befunde zur Produktivität}
+\label{sec:ergebnisse-produktivitaet}
+
+Die Befunde widersprechen sich. In drei Feldexperimenten mit 4.867 Entwicklern steigerte Code-Completion die erledigten Aufgaben um 26\,\%, vor allem bei Berufseinsteigern~\cite{cui2025genai}. Bei 16 erfahrenen Open-Source-Entwicklern verlängerten KI-Werkzeuge die Bearbeitungszeit dagegen um 19\,\%, obwohl sie eine Beschleunigung von 20\,\% wahrnahmen~\cite{becker2025metr}. Ursachen waren große, vertraute Codebasen, implizites Wissen und unzuverlässige Ausgaben. Der Nutzen hängt also von Aufgabe, Codebasis und Erfahrung ab, und Selbsteinschätzungen überschätzen ihn.

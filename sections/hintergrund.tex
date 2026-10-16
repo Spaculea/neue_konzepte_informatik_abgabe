@@ -2,14 +2,10 @@
 \section{Hintergrund}
 \label{sec:hintergrund}
 
-% Definition KI-Coding-Agent: LLM-basiert, mehrschrittig, nutzt Werkzeuge (Dateien, Shell, Tests).
-% Abgrenzung zu reiner Code-Completion.
-\todo{Definition KI-Coding-Agent und Abgrenzung}
+\textit{KI-Coding-Agent.} Unter einem KI-Coding-Agenten verstehen wir ein System, das ein großes Sprachmodell (LLM) als zentrale Steuerung nutzt, eine Aufgabe in mehrere Schritte zerlegt und dabei Werkzeuge einsetzt: Dateien lesen und schreiben, Befehle ausführen, Tests starten. Die Rückmeldungen der Umgebung fließen in die nächsten Schritte ein. Typische Komponenten sind Planung, Gedächtnis, Wahrnehmung und Aktion~\cite{liu2024agentsurvey}. Davon abzugrenzen ist reine Code-Completion, bei der das Modell Vorschläge macht und der Mensch jeden Schritt selbst auslöst und übernimmt.
 
-% Autonomiestufen: von Vorschlägen über Human-in-the-Loop bis vollautonom.
-% Begriff „Workflow“ für dieses Paper festlegen.
-\todo{Autonomiestufen und Workflow-Begriff}
+\textit{Autonomiestufen.} Chen et al.\ beschreiben ein Spektrum vom rein menschlichen Arbeiten über Copilots, die \emph{mit} dem Menschen programmieren, bis zu Agenten, die \emph{für} ihn programmieren~\cite{chen2025codewithme}. Auch innerhalb agentischer Systeme variiert die Autonomie: von fest vorgegebenen Abläufen, in denen das LLM keine Entscheidungen über nächste Schritte trifft~\cite{xia2025agentless}, über Human-in-the-Loop-Ansätze mit Freigaben~\cite{takerngsaksiri2025hula} bis zu Agenten, die aus einem Issue selbstständig einen Pull Request erstellen~\cite{robbes2026agenticmuch}.
 
-% Kurzer Überblick über Agentensysteme und Benchmarks, z.B. SWE-bench~\cite{jimenez2024swebench},
-% SWE-agent~\cite{yang2024sweagent}, OpenHands~\cite{wang2025openhands} und Agentless~\cite{xia2025agentless}
-\todo{Überblick über Agentensysteme und Benchmarks~\cite{jimenez2024swebench,yang2024sweagent,wang2025openhands,xia2025agentless}}
+\textit{Workflow.} Als Workflow bezeichnen wir in diesem Paper die Abfolge der Arbeitsschritte zwischen Mensch und Agent. Dazu gehören der Kontext, den der Agent erhält, die Stellen, an denen der Mensch plant, freigibt oder eingreift, sowie die automatischen und manuellen Prüfungen bis zur Übernahme des Codes.
+
+\textit{Systeme und Benchmarks.} Standard für die Evaluation ist SWE-bench mit 2.294 realen GitHub-Issues aus zwölf Python-Projekten, deren Lösung anhand der Tests des ursprünglichen Pull Requests geprüft wird~\cite{jimenez2024swebench}. Während das beste Modell 2023 nur 1,96\,\% der Aufgaben löste~\cite{jimenez2024swebench}, löste SWE-agent wenige Monate später 12,47\,\% des vollständigen Benchmarks~\cite{yang2024sweagent}. Auf der Teilmenge SWE-bench Lite mit 300 Aufgaben erreichten AutoCodeRover 19\,\%~\cite{zhang2024autocoderover}, OpenHands 26\,\%~\cite{wang2025openhands} und Agentless 32\,\%~\cite{xia2025agentless}.

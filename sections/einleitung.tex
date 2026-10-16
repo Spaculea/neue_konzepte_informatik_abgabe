@@ -2,17 +2,12 @@
 \section{Einleitung}
 \label{sec:einleitung}
 
-% Motivation: Wandel von Code-Completion zu Agenten, die planen, Werkzeuge ausführen und ganze Repositories bearbeiten
-\todo{Motivation}
+KI-gestützte Programmierwerkzeuge haben sich innerhalb kurzer Zeit grundlegend verändert. Frühe Assistenten wie GitHub Copilot ergänzen Codezeilen, während der Mensch jeden Arbeitsschritt selbst steuert. Aktuelle KI-Coding-Agenten wie Claude Code, Codex oder OpenHands planen dagegen mehrschrittige Änderungen selbstständig, lesen und bearbeiten Dateien, führen Befehle und Tests aus und reichen fertige Pull Requests ein~\cite{liu2024agentsurvey,chen2025codewithme}. Sie sind bereits Praxis: Bis Februar 2026 zeigen 22 bis 29\,\% von über 128.000 GitHub-Projekten Spuren von Coding-Agenten~\cite{robbes2026agenticmuch}.
 
-% Problem: Nicht die Wahl des Werkzeugs, sondern die Gestaltung des Workflows entscheidet; systematische Übersicht fehlt
-\todo{Problemstellung}
+Mit der Autonomie verschiebt sich die zentrale Frage. Es geht nicht mehr nur darum, welches Werkzeug eingesetzt wird, sondern wie der Workflow gestaltet ist, in den der Agent eingebettet ist: Welchen Kontext erhält er, an welchen Stellen greift der Mensch ein, und wie wird das Ergebnis geprüft? Die Befunde dazu sind uneinheitlich. Kontrollierte Studien berichten teils deutliche Produktivitätsgewinne~\cite{chen2025codewithme,cui2025genai}, während erfahrene Entwickler in einer randomisierten Studie mit KI-Werkzeugen 19\,\% langsamer waren~\cite{becker2025metr}. Zugleich zeigen Analysen von Benchmarks und Pull Requests, dass Agentencode häufiger abgelehnt wird~\cite{li2025aidev} und neue Sicherheitslücken einführen kann~\cite{sajadi2025patchsecurity}. Eine Übersicht, die diese Befunde zu Empfehlungen für die Workflow-Gestaltung verdichtet, fehlt bislang.
 
-% Forschungsfrage wörtlich aus PLAN.md übernehmen
-Dieses Paper untersucht die folgende Forschungsfrage: Welche Gestaltungsprinzipien für Entwickler-Workflows mit KI-Coding-Agenten lassen sich aus der aktuellen Forschung ableiten, und wie wirken sie sich auf Codequalität und Produktivität aus?
+Dieses Paper untersucht daher die folgende Forschungsfrage: Welche Gestaltungsprinzipien für Entwickler-Workflows mit KI-Coding-Agenten lassen sich aus der aktuellen Forschung ableiten, und wie wirken sie sich auf Codequalität und Produktivität aus?
 
-% Beitrag als kurze Aufzählung (Übersicht der Literatur, Prinzipien, Forschungslücken)
-\todo{Beitrag des Papers}
+Der Beitrag ist dreiteilig: eine strukturierte Analyse von 22 Arbeiten entlang der Dimensionen Autonomie, Kontext und Qualitätssicherung, fünf daraus abgeleitete Gestaltungsprinzipien mit ihrer belegten Wirkung sowie eine Einordnung der Widersprüche zwischen Benchmark- und Praxisbefunden.
 
-% Aufbau: ein Satz pro Abschnitt mit \ref
 Abschnitt~\ref{sec:hintergrund} führt die zentralen Begriffe ein. Abschnitt~\ref{sec:methodik} beschreibt das Vorgehen der Literaturanalyse, Abschnitt~\ref{sec:ergebnisse} deren Ergebnisse. Daraus leitet Abschnitt~\ref{sec:prinzipien} Gestaltungsprinzipien ab. Abschnitt~\ref{sec:diskussion} diskutiert Forschungslücken und Grenzen, Abschnitt~\ref{sec:fazit} schließt das Paper ab.
