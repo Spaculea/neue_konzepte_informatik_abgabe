@@ -1,0 +1,344 @@
+% Abgabefassung, Literaturstand: 16. Oktober 2026.
+% Standard: Autorenfassung. Anonymisiert kompilieren mit:
+% pdflatex -jobname=paper_review "\def\ReviewVersion{1}\input{main.tex}"
+\documentclass[conference]{IEEEtran}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage{cite}
+\usepackage{array}
+\usepackage{balance}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
+\renewcommand{\IEEEkeywordsname}{Schlüsselwörter}
+\urlstyle{same}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+\title{KI-Coding-Agenten in Entwickler-Workflows:\\Gestaltungsprinzipien und Evidenzgrenzen}
+\ifdefined\ReviewVersion
+\author{\IEEEauthorblockN{Anonymisierte Fassung}}
+\hypersetup{pdfauthor={}}
+\else
+\author{
+\IEEEauthorblockN{Matej Vidakovic}
+\IEEEauthorblockA{Informatik\\Duale Hochschule Baden-Württemberg}
+\and
+\IEEEauthorblockN{Malik Haase}
+\IEEEauthorblockA{Informatik\\Duale Hochschule Baden-Württemberg}
+\and
+\IEEEauthorblockN{Sergiu Paculea}
+\IEEEauthorblockA{Informatik\\Duale Hochschule Baden-Württemberg}}
+\hypersetup{pdfauthor={Matej Vidakovic, Malik Haase, Sergiu Paculea}}
+\fi
+\hypersetup{pdftitle={KI-Coding-Agenten in Entwickler-Workflows: Gestaltungsprinzipien und Evidenzgrenzen}}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+KI-Coding-Agenten planen Aufgaben, ändern Code und führen Werkzeuge aus. Ihre Einbindung in Entwickler-Workflows erfordert jedoch Entscheidungen über Autonomie, Kontext und Qualitätssicherung. Diese narrative Literaturanalyse synthetisiert 21 Arbeiten aus den Jahren 2024 bis 2026 und unterscheidet kontrollierte Befunde, Beobachtungen und Gestaltungsempfehlungen. Daraus werden fünf Prinzipien abgeleitet: gemeinsame Planung, risikogerechte Autonomie, gezielter Kontext, mehrstufige Verifikation und überprüfbare Änderungen. Die Literatur belegt einzelne Verbesserungen unter konkreten Versuchsbedingungen, aber keinen allgemeinen Produktivitätsgewinn und keine isolierte Wirksamkeit des gesamten Prinzipiensatzes. Aktive Arbeitszeit, Gesamtdauer, Testbestehen und funktionale Korrektheit müssen getrennt bewertet werden. Für belastbare Workflow-Empfehlungen fehlen im untersuchten Korpus insbesondere kontrollierte Vergleiche einzelner Gestaltungsentscheidungen und langfristige Messungen von Wartbarkeit und menschlichem Prüfaufwand.
+\end{abstract}
+\begin{IEEEkeywords}
+KI-Coding-Agenten, Entwickler-Workflows, Codequalität, Produktivität, menschliche Aufsicht
+\end{IEEEkeywords}
+
+\section{Einleitung}
+Coding-Agenten übernehmen über einzelne Codevorschläge hinaus zusammenhängende Entwicklungsaufgaben. Ihre praktische Relevanz zeigt eine GitHub-Analyse von 128.018 Projekten: Robbes et al.~\cite{robbes2026agenticmuch} ermitteln eine konservative Adoptionsrate von 22,20\,\%; 28,66\,\% sind eine modellgestützte obere Schätzung. Diese Stichprobe repräsentiert jedoch nicht die gesamte Softwareentwicklung.
+
+Mit der Delegation verschiebt sich menschliche Arbeit zum Beschreiben, Überwachen und Prüfen. Ob dies Zeit spart und korrekten Code hervorbringt, lässt sich weder aus Benchmark-Erfolgen noch aus der Zahl erzeugter Pull Requests (PRs) allein beantworten. Die vorliegende Arbeit untersucht deshalb:
+\emph{Welche Gestaltungsprinzipien für Entwickler-Workflows mit KI-Coding-Agenten lassen sich aus aktueller Literatur ableiten, und welche empirischen Hinweise und Evidenzgrenzen bestehen hinsichtlich Codequalität und Produktivität?}
+
+Der Beitrag ist eine vergleichende Synthese entlang der Dimensionen Autonomie, Kontext und Qualitätssicherung. Die daraus abgeleiteten Prinzipien sind begründete Empfehlungen; ihre Wirksamkeit als gemeinsamer Workflow wird nicht als nachgewiesen vorausgesetzt.
+
+\section{Vorgehen und Abgrenzung}
+Grundlage ist eine gezielte narrative Analyse von 21 Arbeiten mit Veröffentlichungsjahren 2024 bis 2026 und Literaturstand 16.~Oktober 2026. Berücksichtigt werden wissenschaftliche Arbeiten zu repositorybezogenen Coding-Agenten, ihrer Nutzung, Steuerung und Evaluation. Konferenzbeiträge bilden die technische Grundlage; Journalartikel und ausdrücklich als solche gekennzeichnete Preprints ergänzen Praxis- und Nutzerbefunde. Eine systematische Vollerhebung mit reproduzierbarem Such- und Screeningprotokoll wird nicht beansprucht.
+
+Für die Synthese wurden Originaltexte und Publikationsmetadaten geprüft sowie Studiendesign, Werkzeug, Population beziehungsweise Benchmark, Endpunkt und Einschränkungen gegenübergestellt. Kontrollierte Vergleiche, deskriptive Beobachtungen und qualitative Aussagen werden getrennt eingeordnet. Ein Architekturvergleich isoliert beispielsweise keinen Autonomieeffekt, wenn zugleich Modell, Werkzeuge oder Budget variieren. Deshalb werden keine studienübergreifenden Effektgrößen oder pauschalen Qualitätsbewertungen gebildet.
+
+Als Coding-Agent gilt hier ein auf einem großen Sprachmodell beruhendes System, das Entwicklungsaktionen mit Werkzeugen ausführt und Rückmeldungen der Umgebung für weitere Schritte nutzt~\cite{liu2024agentsurvey}. Der Autonomiegrad variiert: Agentless verwendet feste Phasen zur Lokalisierung, Reparatur und Validierung~\cite{xia2025agentless}; HULA integriert menschliche Rückmeldungen in Planung und Umsetzung~\cite{takerngsaksiri2025hula}. Plattformen wie OpenHands stellen dafür unter anderem isolierte Ausführungsumgebungen bereit~\cite{wang2025openhands}. Codevervollständigung wird ausschließlich als angrenzender Produktivitätsvergleich berücksichtigt.
+
+\section{Vergleichende Befunde}
+\subsection{Autonomie und menschliche Beteiligung}
+Die Produktivitätsbefunde beziehen sich auf unterschiedliche Aufgaben und Zielgrößen (Tabelle~\ref{tab:produktivitaet}). Chen et al.~\cite{chen2025codewithme} beobachten mit OpenHands häufiger erfolgreiche Aufgaben als mit Copilot und weniger aktive menschliche Arbeitszeit. Einschließlich Agentenlaufzeit beträgt die Gesamtdauer erfolgreicher Aufgaben jedoch 27,9 statt 25,1 Minuten. Die Ergebnisse der kleinen Studierendenstichprobe erlauben keine allgemeine Aussage über professionelle Teams oder einen kausalen Vorteil bei unbekannten Codebasen.
+
+\begin{table*}[t]
+\caption{Ausgewählte Produktivitätsbefunde mit unterschiedlichen Endpunkten. PP: Prozentpunkte. Die Zeilen bilden kein Leistungsranking.}
+\label{tab:produktivitaet}
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}L{0.13\textwidth}L{0.27\textwidth}L{0.31\textwidth}L{0.23\textwidth}@{}}
+\hline
+\textbf{Studie} & \textbf{Design und Werkzeug} & \textbf{Gemessener Befund} & \textbf{Aussagegrenze}\\
+\hline
+Chen et al.~\cite{chen2025codewithme} & Kontrollierte Nutzerstudie; 20 Studierende; OpenHands gegenüber Copilot & Erfolg 25 auf 60\,\% (+35 PP); aktive Zeit erfolgreicher Aufgaben 25,1 auf 12,5 min & Mit Agentenlaufzeit 27,9 min; aktive Zeit ist keine Gesamtdauer\\[3pt]
+Cui et al.~\cite{cui2025genai} & Drei randomisierte Feldexperimente; 4.867 Entwickler; Copilot-Codevervollständigung & Gepoolte Schätzung: 26,08\,\% mehr erledigte Aufgaben bei Nutzung (Standardfehler 10,3 PP) & Kein Test autonomer Agenten oder der hier abgeleiteten Prinzipien\\[3pt]
+Becker et al.~\cite{becker2025metr} & Randomisierte KI-Zulassung; 16 erfahrene Open-Source-Entwickler; 246 Aufgaben; überwiegend Cursor & Bearbeitungszeit mit KI 19\,\% höher; nachträglich subjektiv 20\,\% Zeitersparnis geschätzt & Vertraute Projekte, Werkzeuge von Anfang 2025 und kleine Population\\
+\hline
+\end{tabular}
+\end{table*}
+
+Cui et al.~\cite{cui2025genai} messen erledigte Aufgaben in Unternehmen mit Codevervollständigung, Becker et al.~\cite{becker2025metr} dagegen Bearbeitungszeit erfahrener Entwickler in eigenen Projekten mit KI-Werkzeugen von Anfang 2025. Die unterschiedlichen Ergebnisse sind daher kein unmittelbarer Widerspruch. Sie zeigen, weshalb Werkzeugtyp, Population und Zeitmaß bei einer Übertragung auf agentische Workflows erhalten bleiben müssen.
+
+Menschliche Aufsicht ist ebenfalls kein einzelner Eingriff. HULA beschreibt Rückmeldungen zu Plänen und Implementierungen im industriellen Einsatz~\cite{takerngsaksiri2025hula}. Dhanorkar et al.~\cite{dhanorkar2026oversight} unterscheiden anhand von 17 Interviews Vorgaben vorab, gemeinsame Planung, laufende Überwachung und nachträgliches Review. Die qualitative Studie beschreibt unter anderem das Vertrauen auf Pläne als Prüfheuristik, misst aber weder deren Fehlerrate noch einen isolierten Qualitätseffekt. Freigegebene Pläne belegen folglich keine korrekte Umsetzung.
+
+\subsection{Kontext und Steuerung}
+Kontextdateien halten Projektkonventionen, Architekturhinweise und Build-Befehle fest. Dies zeigen Analysen von 253 \texttt{CLAUDE.md}-Dateien~\cite{chatlatanagulchai2025manifests} sowie von Kontextdateien in 10.000 ausgewählten Open-Source-Projekten~\cite{mohsenimofidi2026context}. Solche Bestandsaufnahmen belegen Verwendung, aber keine Wirksamkeit.
+
+Gloaguen et al.~\cite{gloaguen2026agentsmd} vergleichen Kontextvarianten auf SWE-bench Lite und CTXBench. Gegenüber fehlenden Kontextdateien ergeben sich keine statistisch signifikanten Gesamteffekte auf die Erfolgsrate; dies ist kein Nachweis gleicher Leistung. Entwicklerseitig eingecheckte Dateien schneiden besser ab als LLM-generierte. Letztere erhöhen die mittlere Schrittzahl um 2,45 beziehungsweise 3,92 und die Inferenzkosten um 20 beziehungsweise 23\,\%. Schritte, Kosten und Erfolg sind somit getrennte Endpunkte. Die Autoren empfehlen, zusätzliche Anweisungen auf konkrete, sonst nicht verfügbare Anforderungen zu begrenzen. Ein generell optimaler Kontextumfang ist damit nicht bestimmt.
+
+\subsection{Verifikation, Sicherheit und Integration}
+SWE-bench prüft Reparaturen realer GitHub-Issues anhand von Tests~\cite{jimenez2024swebench}. Testbestehen ist jedoch nur ein Näherungsmaß funktionaler Korrektheit. Bei AutoCodeRover wurden im aggregierten \emph{@3}-Versuch 51 von 78 testbestehenden Patches manuell als korrekt eingestuft; diese 65,4\,\% dürfen nicht mit der Erfolgsrate des einzelnen \emph{@1}-Laufs vermischt werden~\cite{zhang2024autocoderover}. Aleithan et al.~\cite{aleithan2024swebenchplus} identifizieren zusätzlich Lösungen in Issue-Texten und schwache Tests als Benchmark-Risiken.
+
+Wang et al.~\cite{wang2026solvedissues} untersuchen 877 zunächst testbestehende Patches auf SWE-bench Verified. Davon scheitern 7,8\,\% an der vollständigen Entwicklertestsuite. Differenzielle Tests zeigen bei 260 Patches (29,6\,\%) Verhaltensabweichungen zur Referenz. Eine solche Abweichung beweist jedoch keinen Fehler: Von 77 manuell untersuchten verdächtigen Patches werden 22 als inkorrekt, vier als korrekt und 51 als unklar bewertet.
+
+Einzelne Prüfmechanismen liefern konkretere Gestaltungshinweise. SWE-agent erreicht in seiner Ablation mit Linter 18 statt 15\,\% gelöste Aufgaben auf SWE-bench Lite~\cite{yang2024sweagent}. Cemri et al.~\cite{cemri2025mast} berichten für 32 Programmieraufgaben eine Steigerung von 25,0 auf 40,6\,\% durch eine veränderte iterative ChatDev-Topologie. Die 15,6 Prozentpunkte sind der Effekt mehrerer Änderungen und kein isolierter Nachweis für eine abschließende Zielprüfung.
+
+Sicherheit ist ein zusätzlicher Endpunkt. Sajadi et al.~\cite{sajadi2025patchsecurity} finden Sicherheitslücken in Reparaturen mehrerer Agenten. Unterschiedliche Modelle und Bearbeitungsmechanismen verhindern dabei eine kausale Zuschreibung an den Autonomiegrad. Umfangreichere Änderungen sind mit Sicherheitsproblemen assoziiert; daraus folgt keine gemessene Risikoreduktion durch kleinere PRs.
+
+Auch die Integration erfordert Nacharbeit: Bei Watanabe et al.~\cite{watanabe2025agenticprs} werden 475 von 567 Claude-Code-PRs angenommen, davon 214 vor dem Merge revidiert (45,1\,\%). Bugfixes sind mit 47,7\,\% die häufigste Revisionskategorie; Mehrfachzuordnungen sind möglich. Ein nicht signifikanter Unterschied im Revisionsumfang gegenüber menschlichen PRs beweist keine Gleichheit des Aufwands. Li et al.~\cite{li2025aidev} finden kürzere Schließlatenzen für angenommene Codex-PRs. Dies misst weder menschliche Arbeitszeit noch Durchsatz. Bei 58,2\,\% der Agenten- und 75,3\,\% der menschlichen Vergleichs-PRs fehlt eine explizite GitHub-Reviewaktion; private Prüfung oder Prüftiefe sind daraus nicht ablesbar.
+
+\clearpage
+\section{Abgeleitete Gestaltungsprinzipien}
+Die folgenden Prinzipien verbinden die Befunde zu einem vorgeschlagenen Workflow. Die genannten Vorteile sind, soweit kein kontrollierter Einzelbefund vorliegt, zu prüfende Erwartungen.
+
+\textbf{P1: Planung gemeinsam prüfen.}
+Aufgabe, Akzeptanzkriterien und Plan werden vor größeren Änderungen abgestimmt. HULA und die Interviewstudie stützen die praktische Umsetzbarkeit dieser Beteiligung~\cite{takerngsaksiri2025hula,dhanorkar2026oversight}. Erwartet wird das frühere Erkennen von Missverständnissen; eine isolierte Zeit- oder Qualitätswirkung ist nicht belegt. Das anschließende Code-Review bleibt erforderlich.
+
+\textbf{P2: Autonomie nach Risiko und Prüfbarkeit staffeln.}
+Delegationsumfang und menschliche Eingriffspunkte sollten vom möglichen Schaden, der Verifizierbarkeit und der Fähigkeit zum Review abhängen. Die Sicherheits- und Aufsichtsbefunde motivieren diese Regel, testen sie aber nicht kausal~\cite{sajadi2025patchsecurity,dhanorkar2026oversight}. Isolation wie bei OpenHands begrenzt den Zugriff auf die Ausführungsumgebung, garantiert jedoch keinen sicheren Patch~\cite{wang2025openhands}.
+
+\textbf{P3: Kontext gezielt ergänzen.}
+Erwartetes Verhalten, relevante Einschränkungen sowie Build- und Testbefehle sollten klar und aktuell verfügbar sein. Zusätzliche Kontextdateien sollten vor allem nicht anderweitig dokumentierte Anforderungen enthalten. Bestandsanalysen und Kontextversuche begründen diese Empfehlung~\cite{mohsenimofidi2026context,gloaguen2026agentsmd}; eine allgemeine Steigerung der Erfolgsrate durch kürzere Dateien ist nicht nachgewiesen.
+
+\textbf{P4: Mehrstufig und am Auftrag verifizieren.}
+Statische Prüfungen, aufgabenbezogene Tests und vor der Integration die vollständige Testsuite sollten kombiniert werden~\cite{yang2024sweagent,wang2026solvedissues}. Ergänzende Tests müssen die Anforderung über bereits bestandene Fälle hinaus prüfen. Die Erfüllung des Gesamtauftrags ist gesondert zu beurteilen~\cite{cemri2025mast}. Belegt sind einzelne Prüfgewinne und übersehene Defekte; eine geringere menschliche Nacharbeit durch diese Kombination ist offen.
+
+\textbf{P5: Änderungen überprüfbar integrieren.}
+Kleine, sachlich abgegrenzte PRs mit dokumentierter Agentenbeteiligung sollten ein menschliches Review und risikogerechte Sicherheitsprüfungen durchlaufen. Revisions- und Sicherheitsbefunde begründen den Prüfbedarf~\cite{watanabe2025agenticprs,sajadi2025patchsecurity}. Der optimale Änderungsumfang und der Nettozeitgewinn dieses Vorgehens wurden damit nicht bestimmt.
+
+\balance
+\section{Diskussion und Ausblick}
+Die stärksten direkten Hinweise betreffen eng begrenzte Interventionen, etwa den Linter in SWE-agent. Nutzerexperimente zeigen zugleich, dass weniger aktive Arbeit keine kürzere Gesamtdauer garantiert. Repository-Analysen liefern Praxisnähe, erlauben aber wegen unterschiedlicher Aufgaben und Auswahlprozesse keine kausale Bewertung einzelner Prinzipien. Akzeptanz, Testbestehen und Änderungsumfang ersetzen weder Wartbarkeit noch Sicherheits- oder Zeitmessungen.
+
+Die narrative Auswahl begrenzt Vollständigkeit und Reproduzierbarkeit. Preprints tragen wesentliche Nutzer- und Sicherheitsbefunde bei; ihr Status ist bei der Gewichtung zu beachten. Zudem unterscheiden sich Modelle, Agentenversionen und Budgets. Die starke Präsenz von SWE-bench mit Python-Repositories begrenzt die Übertragbarkeit auf andere Sprachen und industrielle Aufgaben. Auch qualitative Ergebnisse aus 17 Interviews sind keine repräsentative Häufigkeitsschätzung.
+
+Im untersuchten Korpus bleibt vor allem offen, welche einzelnen Gestaltungsentscheidungen unter vergleichbaren Bedingungen wirken und wie sich Prüfaufwand, Wartbarkeit und Folgedefekte langfristig entwickeln. Zeitlich umfangreiche Repository-Beobachtungen beantworten diese Wirkungsfragen nicht automatisch. Sinnvoll wären kontrollierte Vergleiche mit konstantem Modell und Budget, in denen Planfreigabe, Kontext und Verifikation einzeln variiert werden. Gemessen werden sollten aktive menschliche Zeit, Gesamtdauer, Inferenzkosten, Review-Aufwand, funktionale Defekte und Sicherheitsbefunde; nachgelagerte Wartungsaufgaben würden kurzfristige Messungen ergänzen.
+
+\section{Fazit}
+Aus der Literatur lassen sich gemeinsame Planung, risikogerechte Autonomie, gezielter Kontext, mehrstufige Verifikation und überprüfbare Integration als fünf begründete Gestaltungsprinzipien ableiten. Ihre erwarteten Vorteile werden durch unterschiedliche Evidenzarten gestützt, aber nicht als Gesamtpaket oder jeweils isoliert nachgewiesen. Die Forschungsfrage ist daher zweigeteilt zu beantworten: Konkrete Workflow-Empfehlungen sind möglich; ein allgemeiner Gewinn an Codequalität oder Produktivität folgt daraus nicht. Dessen Nachweis erfordert vergleichbare Endpunkte und kontrollierte sowie langfristige Evaluationen.
+
+\clearpage
+\nobalance
+\IEEEtriggeratref{12}
+% Literatur ist eingebettet: Diese TeX-Datei ist ohne weitere Quelldateien kompilierbar.
+% Generated by IEEEtran.bst, version: 1.14 (2015/08/26)
+\begin{thebibliography}{10}
+\providecommand{\url}[1]{#1}
+\csname url@samestyle\endcsname
+\providecommand{\newblock}{\relax}
+\providecommand{\bibinfo}[2]{#2}
+\providecommand{\BIBentrySTDinterwordspacing}{\spaceskip=0pt\relax}
+\providecommand{\BIBentryALTinterwordstretchfactor}{4}
+\providecommand{\BIBentryALTinterwordspacing}{\spaceskip=\fontdimen2\font plus
+\BIBentryALTinterwordstretchfactor\fontdimen3\font minus
+  \fontdimen4\font\relax}
+\providecommand{\BIBforeignlanguage}[2]{{%
+\expandafter\ifx\csname l@#1\endcsname\relax
+\typeout{** WARNING: IEEEtran.bst: No hyphenation pattern has been}%
+\typeout{** loaded for the language `#1'. Using the pattern for}%
+\typeout{** the default language instead.}%
+\else
+\language=\csname l@#1\endcsname
+\fi
+#2}}
+\providecommand{\BIBdecl}{\relax}
+\BIBdecl
+
+\bibitem{robbes2026agenticmuch}
+\BIBentryALTinterwordspacing
+R.~Robbes, T.~Matricon, T.~Degueule, A.~Hora, and S.~Zacchiroli, ``Agentic
+  much? {Adoption} of coding agents on {GitHub},'' \emph{ACM Transactions on
+  Software Engineering and Methodology}, 2026, online Accepted Manuscript, 26.
+  Juni 2026. [Online]. Available: \url{https://doi.org/10.1145/3822180}
+\BIBentrySTDinterwordspacing
+
+\bibitem{liu2024agentsurvey}
+\BIBentryALTinterwordspacing
+J.~Liu, K.~Wang, Y.~Chen, X.~Peng, Z.~Chen, L.~Zhang, and Y.~Lou, ``Large
+  language model-based agents for software engineering: A survey,'' arXiv
+  preprint arXiv:2409.02977v2, 2024, verwendete Fassung: v2, Dezember 2025.
+  [Online]. Available: \url{https://arxiv.org/abs/2409.02977v2}
+\BIBentrySTDinterwordspacing
+
+\bibitem{xia2025agentless}
+\BIBentryALTinterwordspacing
+C.~S. Xia, Y.~Deng, S.~Dunn, and L.~Zhang, ``Demystifying {LLM}-based software
+  engineering agents,'' \emph{Proceedings of the ACM on Software Engineering},
+  vol.~2, no. FSE, pp. 801--824, 2025. [Online]. Available:
+  \url{https://doi.org/10.1145/3715754}
+\BIBentrySTDinterwordspacing
+
+\bibitem{takerngsaksiri2025hula}
+\BIBentryALTinterwordspacing
+W.~Takerngsaksiri, J.~Pasuksmit, P.~Thongtanunam, C.~Tantithamthavorn,
+  R.~Zhang, F.~Jiang, J.~Li, E.~Cook, K.~Chen, and M.~Wu, ``Human-in-the-loop
+  software development agents,'' in \emph{Proceedings of the 47th International
+  Conference on Software Engineering: Software Engineering in Practice
+  (ICSE-SEIP)}, 2025, pp. 342--352. [Online]. Available:
+  \url{https://doi.org/10.1109/ICSE-SEIP66354.2025.00036}
+\BIBentrySTDinterwordspacing
+
+\bibitem{wang2025openhands}
+\BIBentryALTinterwordspacing
+X.~Wang, B.~Li, Y.~Song, F.~F. Xu, X.~Tang, M.~Zhuge, J.~Pan, Y.~Song, B.~Li,
+  J.~Singh, H.~H. Tran, F.~Li, R.~Ma, M.~Zheng, B.~Qian, Y.~Shao,
+  N.~Muennighoff, Y.~Zhang, B.~Hui, J.~Lin, R.~Brennan, H.~Peng, H.~Ji, and
+  G.~Neubig, ``{OpenHands}: An open platform for {AI} software developers as
+  generalist agents,'' in \emph{International Conference on Learning
+  Representations (ICLR)}, 2025. [Online]. Available:
+  \url{https://arxiv.org/abs/2407.16741v3}
+\BIBentrySTDinterwordspacing
+
+\bibitem{chen2025codewithme}
+\BIBentryALTinterwordspacing
+V.~Chen, A.~Talwalkar, R.~Brennan, and G.~Neubig, ``Code with me or for me?
+  {How} increasing {AI} automation transforms developer workflows,'' arXiv
+  preprint arXiv:2507.08149v2, 2025. [Online]. Available:
+  \url{https://arxiv.org/abs/2507.08149v2}
+\BIBentrySTDinterwordspacing
+
+\bibitem{cui2025genai}
+\BIBentryALTinterwordspacing
+K.~Z. Cui, M.~Demirer, S.~Jaffe, L.~Musolff, S.~Peng, and T.~Salz, ``The
+  effects of generative {AI} on high-skilled work: Evidence from three field
+  experiments with software developers,'' \emph{Management Science}, 2026,
+  online veröffentlicht am 27. Februar 2026. [Online]. Available:
+  \url{https://doi.org/10.1287/mnsc.2025.00535}
+\BIBentrySTDinterwordspacing
+
+\bibitem{becker2025metr}
+\BIBentryALTinterwordspacing
+J.~Becker, N.~Rush, E.~Barnes, and D.~Rein, ``Measuring the impact of
+  early-2025 {AI} on experienced open-source developer productivity,'' arXiv
+  preprint arXiv:2507.09089v2, 2025. [Online]. Available:
+  \url{https://arxiv.org/abs/2507.09089v2}
+\BIBentrySTDinterwordspacing
+
+\bibitem{dhanorkar2026oversight}
+\BIBentryALTinterwordspacing
+S.~Dhanorkar, S.~Passi, and M.~Vorvoreanu, ``Human oversight of agentic systems
+  in practice: Examining the oversight work, challenges, and heuristics of
+  developers using software agents,'' arXiv preprint arXiv:2606.05391v1, 2026.
+  [Online]. Available: \url{https://arxiv.org/abs/2606.05391v1}
+\BIBentrySTDinterwordspacing
+
+\bibitem{chatlatanagulchai2025manifests}
+\BIBentryALTinterwordspacing
+W.~Chatlatanagulchai, K.~Thonglek, B.~Reid, Y.~Kashiwa, P.~Leelaprute,
+  A.~Rungsawang, B.~Manaskasemsak, and H.~Iida, ``On the use of agentic coding
+  manifests: An empirical study of {Claude Code},'' in \emph{Proceedings of the
+  26th International Conference on Product-Focused Software Process Improvement
+  (PROFES)}, 2025, pp. 543--551. [Online]. Available:
+  \url{https://doi.org/10.1007/978-3-032-12089-2_40}
+\BIBentrySTDinterwordspacing
+
+\bibitem{mohsenimofidi2026context}
+\BIBentryALTinterwordspacing
+S.~Mohsenimofidi, M.~Galster, C.~Treude, and S.~Baltes, ``Context engineering
+  for {AI} agents in open-source software,'' in \emph{Proceedings of the 23rd
+  IEEE/ACM International Conference on Mining Software Repositories (MSR)},
+  2026, pp. 194--198, preprint: arXiv:2510.21413. [Online]. Available:
+  \url{https://doi.org/10.1145/3793302.3793350}
+\BIBentrySTDinterwordspacing
+
+\bibitem{gloaguen2026agentsmd}
+\BIBentryALTinterwordspacing
+T.~Gloaguen, N.~M{\"u}ndler-Sasahara, M.~N. M{\"u}ller, V.~Raychev, and
+  M.~Vechev, ``Evaluating {AGENTS.md}: Are repository-level context files
+  helpful for coding agents?'' in \emph{ICLR 2026 Workshop on Memory for
+  LLM-Based Agentic Systems (MemAgents)}, 2026, verwendete Fassung:
+  arXiv:2602.11988v3, September 2026. [Online]. Available:
+  \url{https://arxiv.org/abs/2602.11988v3}
+\BIBentrySTDinterwordspacing
+
+\bibitem{jimenez2024swebench}
+\BIBentryALTinterwordspacing
+C.~E. Jimenez, J.~Yang, A.~Wettig, S.~Yao, K.~Pei, O.~Press, and K.~Narasimhan,
+  ``{SWE-bench}: Can language models resolve real-world {GitHub} issues?'' in
+  \emph{International Conference on Learning Representations (ICLR)}, 2024.
+  [Online]. Available: \url{https://arxiv.org/abs/2310.06770v3}
+\BIBentrySTDinterwordspacing
+
+\bibitem{zhang2024autocoderover}
+\BIBentryALTinterwordspacing
+Y.~Zhang, H.~Ruan, Z.~Fan, and A.~Roychoudhury, ``{AutoCodeRover}: Autonomous
+  program improvement,'' in \emph{Proceedings of the 33rd ACM SIGSOFT
+  International Symposium on Software Testing and Analysis (ISSTA)}, 2024, pp.
+  1592--1604. [Online]. Available:
+  \url{https://doi.org/10.1145/3650212.3680384}
+\BIBentrySTDinterwordspacing
+
+\bibitem{aleithan2024swebenchplus}
+\BIBentryALTinterwordspacing
+R.~Aleithan, H.~Xue, M.~M. Mohajer, E.~Nnorom, G.~Uddin, and S.~Wang,
+  ``{SWE-Bench+}: Enhanced coding benchmark for {LLMs},'' arXiv preprint
+  arXiv:2410.06992v2, 2024. [Online]. Available:
+  \url{https://arxiv.org/abs/2410.06992v2}
+\BIBentrySTDinterwordspacing
+
+\bibitem{wang2026solvedissues}
+\BIBentryALTinterwordspacing
+Y.~Wang, M.~Pradel, and Z.~Liu, ``Are ``solved issues'' in {SWE-bench} really
+  solved correctly? {An} empirical study,'' in \emph{Proceedings of the 48th
+  International Conference on Software Engineering (ICSE)}, 2026, pp. 169--181,
+  preprint: arXiv:2503.15223. [Online]. Available:
+  \url{https://doi.org/10.1145/3744916.3764576}
+\BIBentrySTDinterwordspacing
+
+\bibitem{yang2024sweagent}
+\BIBentryALTinterwordspacing
+J.~Yang, C.~E. Jimenez, A.~Wettig, K.~Lieret, S.~Yao, K.~Narasimhan, and
+  O.~Press, ``{SWE-agent}: Agent-computer interfaces enable automated software
+  engineering,'' in \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, vol.~37, 2024, pp. 50\,528--50\,652. [Online]. Available:
+  \url{https://doi.org/10.52202/079017-1601}
+\BIBentrySTDinterwordspacing
+
+\bibitem{cemri2025mast}
+\BIBentryALTinterwordspacing
+M.~Cemri, M.~Z. Pan, S.~Yang, L.~A. Agrawal, B.~Chopra, R.~Tiwari, K.~Keutzer,
+  A.~Parameswaran, D.~Klein, K.~Ramchandran, M.~Zaharia, J.~E. Gonzalez, and
+  I.~Stoica, ``Why do multi-agent {LLM} systems fail?'' in \emph{Advances in
+  Neural Information Processing Systems (NeurIPS), Datasets and Benchmarks
+  Track}, vol.~38, 2025, pp. 135\,676--135\,729, preprint: arXiv:2503.13657.
+  [Online]. Available: \url{https://doi.org/10.52202/085713-4082}
+\BIBentrySTDinterwordspacing
+
+\bibitem{sajadi2025patchsecurity}
+\BIBentryALTinterwordspacing
+A.~Sajadi, K.~Damevski, and P.~Chatterjee, ``How safe are {AI}-generated
+  patches? {A} large-scale study on security risks in {LLM} and agentic
+  automated program repair on {SWE-bench},'' arXiv preprint arXiv:2507.02976v3,
+  2025. [Online]. Available: \url{https://arxiv.org/abs/2507.02976v3}
+\BIBentrySTDinterwordspacing
+
+\bibitem{watanabe2025agenticprs}
+\BIBentryALTinterwordspacing
+M.~Watanabe, H.~Li, Y.~Kashiwa, B.~Reid, H.~Iida, and A.~E. Hassan, ``On the
+  use of agentic coding: An empirical study of pull requests on {GitHub},''
+  \emph{ACM Transactions on Software Engineering and Methodology (TOSEM)},
+  vol.~35, no.~10, pp. 1--24, 2026. [Online]. Available:
+  \url{https://doi.org/10.1145/3798166}
+\BIBentrySTDinterwordspacing
+
+\bibitem{li2025aidev}
+\BIBentryALTinterwordspacing
+H.~Li, H.~Zhang, and A.~E. Hassan, ``The rise of {AI} teammates in software
+  engineering ({SE}) 3.0: How autonomous coding agents are reshaping software
+  engineering,'' arXiv preprint arXiv:2507.15003v1, 2025. [Online]. Available:
+  \url{https://arxiv.org/abs/2507.15003v1}
+\BIBentrySTDinterwordspacing
+
+\end{thebibliography}
+
+\end{document}
