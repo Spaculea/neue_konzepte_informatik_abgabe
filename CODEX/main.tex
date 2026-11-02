@@ -8,6 +8,8 @@
 \usepackage{cite}
 \usepackage{array}
 \usepackage{balance}
+\usepackage{capt-of}
+\usepackage{cuted}
 \usepackage{url}
 \usepackage[hidelinks]{hyperref}
 \renewcommand{\IEEEkeywordsname}{Schlüsselwörter}
@@ -59,9 +61,9 @@ Als Coding-Agent gilt hier ein auf einem großen Sprachmodell beruhendes System,
 \section{Vergleichende Befunde}
 \subsection{Autonomie und menschliche Beteiligung}
 Die Produktivitätsbefunde beziehen sich auf unterschiedliche Aufgaben und Zielgrößen (Tabelle~\ref{tab:produktivitaet}). Chen et al.~\cite{chen2025codewithme} beobachten mit OpenHands häufiger erfolgreiche Aufgaben als mit Copilot und weniger aktive menschliche Arbeitszeit. Unter Einbeziehung der Agentenlaufzeit beträgt die gesamte Bearbeitungsdauer im OpenHands-Workflow durchschnittlich 27,9 Minuten und ist damit mit den 25,1 Minuten menschlicher Arbeitszeit im Copilot-Workflow vergleichbar. Die geringere aktive Arbeitszeit führt somit nicht zwangsläufig zu einer kürzeren Gesamtdauer. Die Ergebnisse der kleinen Studierendenstichprobe erlauben keine allgemeine Aussage über professionelle Teams oder einen kausalen Vorteil bei unbekannten Codebasen.
-
-\begin{table*}[t]
-\caption{Ausgewählte Produktivitätsbefunde: unterschiedliche Endpunkte, kein Ranking (PP = Prozentpunkte).}
+\clearpage
+\begin{strip}
+\captionof{table}{Ausgewählte Produktivitätsbefunde: unterschiedliche Endpunkte, kein Ranking (PP = Prozentpunkte).}
 \label{tab:produktivitaet}
 \centering
 \small
@@ -75,7 +77,7 @@ Cui et al.~\cite{cui2025genai} & Drei randomisierte Feldexperimente; 4.867 Entwi
 Becker et al.~\cite{becker2025metr} & Randomisierte KI-Zulassung; 16 erfahrene Open-Source-Entwickler; 246 Aufgaben; überwiegend Cursor & Bearbeitungszeit mit KI 19\,\% höher; nachträglich subjektiv 20\,\% Zeitersparnis geschätzt & Vertraute Projekte, Werkzeuge von Anfang 2025 und kleine Population\\
 \hline
 \end{tabular}
-\end{table*}
+\end{strip}
 
 Cui et al.~\cite{cui2025genai} messen wöchentliche PRs als Maß erledigter Aufgaben bei Codevervollständigung, Becker et al.~\cite{becker2025metr} dagegen Bearbeitungszeit erfahrener Entwickler in eigenen Projekten mit KI-Werkzeugen von Anfang 2025. Die unterschiedlichen Ergebnisse sind daher kein unmittelbarer Widerspruch. Daraus lässt sich ableiten, dass Werkzeugtyp, Population und Zeitmaß bei der Übertragung auf agentische Workflows zu berücksichtigen sind.
 
@@ -99,7 +101,6 @@ Auch die Integration erfordert Nacharbeit: Bei Watanabe et al.~\cite{watanabe202
 
 Li et al.~\cite{li2025aidev} finden kürzere Schließlatenzen für angenommene Codex-PRs. Dies misst weder menschliche Arbeitszeit noch Durchsatz. Bei 58,2\,\% der Agenten- und 75,3\,\% der menschlichen Vergleichs-PRs fehlt eine explizite GitHub-Reviewaktion; private Prüfung oder Prüftiefe sind daraus nicht ablesbar~\cite{li2025aidev}.
 
-\clearpage
 \section{Abgeleitete Gestaltungsprinzipien}
 Die folgenden Prinzipien verbinden die Befunde zu einem vorgeschlagenen Workflow. Die genannten Vorteile sind, soweit kein kontrollierter Einzelbefund vorliegt, zu prüfende Erwartungen.
 
