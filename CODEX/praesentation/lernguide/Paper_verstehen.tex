@@ -1,0 +1,561 @@
+\documentclass[11pt,a4paper,parskip=half]{scrartcl}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[margin=2.3cm]{geometry}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage[most]{tcolorbox}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\usepackage[german=quotes]{csquotes}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{akzent}{HTML}{1F4E79}
+\definecolor{gruen}{HTML}{2E7D32}
+\definecolor{rot}{HTML}{B23B3B}
+\definecolor{grau}{HTML}{F2F4F7}
+
+\addtokomafont{disposition}{\color{akzent}}
+\setlist{itemsep=2pt,topsep=3pt}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+\newtcolorbox{kernbox}[1][]{colback=akzent!6,colframe=akzent,fonttitle=\bfseries,title={#1},arc=2pt,boxrule=0.8pt}
+\newtcolorbox{merke}{colback=gruen!6,colframe=gruen,fonttitle=\bfseries,title={Merke},arc=2pt,boxrule=0.8pt}
+\newtcolorbox{falle}{colback=rot!6,colframe=rot,fonttitle=\bfseries,title={Vorsicht, Denkfehler},arc=2pt,boxrule=0.8pt}
+\newtcolorbox{beispiel}{colback=grau,colframe=grau!60!black,fonttitle=\bfseries,title={Anschaulich erklärt},arc=2pt,boxrule=0.5pt}
+
+% Studien-Steckbrief
+\newcommand{\studie}[6]{%
+\begin{tcolorbox}[colback=white,colframe=akzent!50,arc=2pt,boxrule=0.6pt,
+  title={\textbf{#1}\hfill\small #2},fonttitle=\color{white},colbacktitle=akzent!80]
+\textbf{Was wurde gemacht?}\enskip #3\par
+\textbf{Was kam heraus?}\enskip #4\par
+\textbf{Was heißt das für unser Paper?}\enskip #5\par
+\textbf{Grenzen:}\enskip #6
+\end{tcolorbox}}
+
+\newcommand{\frage}[2]{\paragraph{#1}#2\par}
+
+\title{Das Paper verstehen}
+\subtitle{KI-Coding-Agenten in Entwickler-Workflows:\\Gestaltungsprinzipien und Evidenzgrenzen}
+\author{Lern- und Verständnisguide zur Präsentation und fachlichen Abfrage}
+\date{Stand des Papers: Literatur bis 16.~Oktober 2026}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\begin{kernbox}[Das ganze Paper in fünf Sätzen]
+\begin{enumerate}[leftmargin=*]
+\item KI-Coding-Agenten sind in der Praxis angekommen: In rund jedem fünften untersuchten GitHub-Projekt finden sich Spuren davon.
+\item Wir haben 21 Studien von 2024 bis 2026 gelesen und gefragt: \emph{Wie sollte man Agenten in die Arbeit einbinden, und was ist dazu wirklich belegt?}
+\item Daraus haben wir fünf Prinzipien abgeleitet: \textbf{Planung} gemeinsam prüfen, \textbf{Autonomie} nach Risiko staffeln, \textbf{Kontext} gezielt ergänzen, mehrstufig \textbf{verifizieren}, überprüfbar \textbf{integrieren}.
+\item Belegt sind nur einzelne, eng begrenzte Maßnahmen. Dass die fünf Prinzipien zusammen wirken, hat niemand getestet, und ein allgemeiner Produktivitätsgewinn folgt aus der Literatur nicht.
+\item Wer Agenten bewertet, muss getrennt messen: aktive Arbeitszeit, Gesamtdauer, Testbestehen und echte Korrektheit.
+\end{enumerate}
+\end{kernbox}
+
+\tableofcontents
+\newpage
+
+%=====================================================================
+\section{Worum geht es überhaupt?}
+
+\subsection{Das Problem}
+Früher haben KI-Werkzeuge wie GitHub Copilot vor allem \emph{Code vervollständigt}: Man tippt, die KI schlägt die nächste Zeile vor. Ein \textbf{Coding-Agent} geht weiter. Man gibt ihm eine ganze Aufgabe (\enquote{Behebe diesen Bug}), und er
+\begin{itemize}
+\item sucht selbst die relevanten Dateien,
+\item plant die Änderung,
+\item ändert Code, führt Befehle und Tests aus,
+\item schaut sich das Ergebnis an und macht weiter, bis er fertig ist.
+\end{itemize}
+
+Dadurch verändert sich die Arbeit der Entwickler: Weniger selbst tippen, mehr \emph{beschreiben, überwachen und prüfen}. Genau hier entsteht die Frage des Papers: Spart das wirklich Zeit? Und ist der Code dann korrekt?
+
+\begin{beispiel}
+Copilot ist wie ein Beifahrer, der dir beim Schreiben das nächste Wort einflüstert. Ein Agent ist wie ein Praktikant, dem du eine Aufgabe gibst und der sie allein erledigt. Der Praktikant spart dir Tipparbeit, aber du musst ihm die Aufgabe gut erklären, zwischendurch nachsehen und am Ende sein Ergebnis kontrollieren. Ob du am Ende Zeit sparst, hängt davon ab, wie viel Erklären und Kontrollieren kostet.
+\end{beispiel}
+
+\subsection{Die Forschungsfrage}
+\begin{kernbox}[Forschungsfrage]
+\emph{Welche Gestaltungsprinzipien für Entwickler-Workflows mit KI-Coding-Agenten lassen sich aus aktueller Literatur ableiten, und welche empirischen Hinweise und Evidenzgrenzen bestehen hinsichtlich Codequalität und Produktivität?}
+\end{kernbox}
+Die Frage hat \textbf{zwei Teile}, und das ist wichtig für das Fazit:
+\begin{enumerate}
+\item \textbf{Ableiten:} Was sollte man tun? (Ergebnis: fünf Prinzipien)
+\item \textbf{Prüfen:} Wie gut ist das belegt? (Ergebnis: nur Einzelmaßnahmen belegt, der Gesamtworkflow nicht)
+\end{enumerate}
+
+\subsection{Die drei Blickwinkel (Dimensionen)}
+Das Paper sortiert alle Studien nach drei Fragen:
+\begin{description}[leftmargin=2.8cm,style=nextline]
+\item[Autonomie] Wie viel darf der Agent allein entscheiden, und wo greift der Mensch ein?
+\item[Kontext] Welches Wissen über das Projekt bekommt der Agent (z.\,B. über eine \texttt{CLAUDE.md})?
+\item[Qualitätssicherung] Wie prüft man, ob das Ergebnis stimmt (Tests, Linter, Review, Sicherheit)?
+\end{description}
+
+\subsection{Der Gedankengang des Papers}
+\begin{center}
+\begin{tikzpicture}[node distance=0.55cm,
+  box/.style={draw=akzent,fill=akzent!6,rounded corners=2pt,align=center,text width=12.5cm,inner sep=5pt,font=\small},
+  arr/.style={-{Stealth[length=2.5mm]},thick,akzent}]
+\node[box] (a) {\textbf{Motivation:} Agenten sind verbreitet (22\,\% der Projekte), aber ob sie Zeit sparen und korrekten Code liefern, ist offen.};
+\node[box,below=of a] (b) {\textbf{Vorgehen:} 21 Studien lesen, nach Evidenzart sortieren (kontrolliert / beobachtend / qualitativ).};
+\node[box,below=of b] (c) {\textbf{Befunde:} Produktivität hängt vom Messmaß ab \textbullet\ Kontextdateien kosten mehr, ohne messbar mehr zu lösen \textbullet\ bestandene Tests sind keine korrekte Lösung.};
+\node[box,below=of c] (d) {\textbf{Prinzipien P1--P5:} aus den Befunden abgeleitete Empfehlungen, jeweils mit Handlungsregel.};
+\node[box,below=of d] (e) {\textbf{Diskussion:} Was trägt die Evidenz? Nur Einzelmaßnahmen. Zielkonflikt: Prüfen kostet Zeit.};
+\node[box,below=of e] (f) {\textbf{Fazit:} Empfehlungen ja, allgemeiner Produktivitäts- oder Qualitätsgewinn nicht belegt.};
+\draw[arr] (a)--(b); \draw[arr] (b)--(c); \draw[arr] (c)--(d); \draw[arr] (d)--(e); \draw[arr] (e)--(f);
+\end{tikzpicture}
+\end{center}
+
+%=====================================================================
+\section{Grundbegriffe, die man kennen muss}
+
+\subsection{Was ist ein Coding-Agent genau?}
+Im Paper (nach Liu et al.) gilt als Coding-Agent ein \textbf{System auf Basis eines großen Sprachmodells (LLM), das Entwicklungsaktionen mit Werkzeugen ausführt und die Rückmeldungen der Umgebung für die nächsten Schritte nutzt}. Entscheidend ist also die Schleife \emph{handeln \(\rightarrow\) Ergebnis ansehen \(\rightarrow\) weiter handeln}. Liu et al.\ beschreiben vier Bausteine: Planung, Gedächtnis, Wahrnehmung und Aktion.
+
+Der \textbf{Autonomiegrad} kann sehr unterschiedlich sein:
+\begin{itemize}
+\item \textbf{Agentless}: fester Ablauf in drei Schritten (Fehler finden, reparieren, prüfen). Das Modell entscheidet nicht selbst, was als Nächstes kommt.
+\item \textbf{HULA}: Der Mensch ist fest eingeplant. Er prüft zuerst den Plan des Agenten, dann den Code.
+\item \textbf{OpenHands}: offene Plattform, auf der der Agent recht frei in einer abgeschotteten Umgebung (Docker-Sandbox) arbeitet.
+\end{itemize}
+
+\subsection{SWE-bench: der Standardtest für Agenten}
+Fast alle technischen Studien messen ihre Agenten auf \textbf{SWE-bench}. Der Benchmark besteht aus echten Bug-Meldungen (Issues) aus 12 bekannten Python-Projekten auf GitHub. Der Agent bekommt den Issue-Text und den Code und soll einen Patch schreiben. Als \enquote{gelöst} zählt die Aufgabe, wenn die Tests aus der echten Korrektur des Projekts bestehen.
+\begin{itemize}
+\item \textbf{SWE-bench} (voll): 2.294 Aufgaben
+\item \textbf{SWE-bench Lite}: 300 Aufgaben, kleiner und günstiger
+\item \textbf{SWE-bench Verified}: 500 Aufgaben, von Menschen geprüft
+\end{itemize}
+
+\begin{falle}
+\enquote{Gelöst} heißt bei SWE-bench nur: \emph{Die ausgewählten Tests sind grün.} Das ist nicht dasselbe wie \enquote{der Code ist richtig}. Genau darauf baut ein großer Teil des Papers auf (Abschnitt~\ref{sec:verifikation}).
+\end{falle}
+
+\subsection{Begriffe aus Statistik und Studiendesign}
+\begin{tabularx}{\textwidth}{@{}>{\bfseries}p{3.6cm}L@{}}
+\toprule
+Begriff & Bedeutung \\
+\midrule
+Kontrollierte Studie & Man vergleicht zwei Bedingungen unter sonst gleichen Umständen (z.\,B. mit und ohne Agent). Nur so kann man einen Unterschied auf die Bedingung zurückführen. \\
+RCT & \emph{Randomized Controlled Trial}: Wer welche Bedingung bekommt, entscheidet der Zufall. Gilt als stärkstes Design. \\
+Within-Subject & Jede Person probiert beide Bedingungen aus (bei Chen: jeder nutzt Copilot \emph{und} OpenHands). \\
+Ablation & Man baut ein einzelnes Teil aus (z.\,B. den Linter) und misst, was sich ändert. So isoliert man dessen Wirkung. \\
+Deskriptiv / Mining & Man beobachtet nur, was es gibt (z.\,B. GitHub-Daten durchsuchen). Zeigt Zusammenhänge, aber keine Ursachen. \\
+Qualitativ & Interviews, Aussagen, Muster. Zeigt \emph{wie} etwas gemacht wird, nicht \emph{wie oft} oder \emph{wie wirksam}. \\
+Endpunkt & Die Größe, die gemessen wird: Erfolgsrate, aktive Zeit, Gesamtdauer, Kosten, Anzahl PRs \ldots \\
+Signifikant & Der Unterschied ist so groß, dass Zufall als Erklärung unwahrscheinlich ist. \\
+Nicht signifikant & Man kann den Unterschied nicht vom Zufall trennen. \textbf{Das heißt nicht, dass beide gleich gut sind!} \\
+Standardfehler & Wie unsicher eine Schätzung ist (Cui: 26,08\,\% bei einem Standardfehler von 10,3\,\%). \\
+Prozentpunkte & Unterschied zwischen zwei Prozentwerten: 25\,\% \(\rightarrow\) 60\,\% sind \textbf{+35 Prozentpunkte} (relativ wären das +140\,\%). \\
+@1 / @3 & Erfolg im ersten Versuch bzw. in mindestens einem von drei Versuchen. \\
+Preprint & Veröffentlicht, aber noch nicht von Fachgutachtern geprüft (meist auf arXiv). \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Weitere Fachbegriffe}
+\begin{tabularx}{\textwidth}{@{}>{\bfseries}p{3.6cm}L@{}}
+\toprule
+Kontextdatei & Datei im Repository (\texttt{CLAUDE.md}, \texttt{AGENTS.md}), in der steht, was der Agent über das Projekt wissen soll: Konventionen, Architektur, Build- und Testbefehle. \\
+Context Engineering & Steuern, \emph{welche} Informationen das Modell bekommt (im Gegensatz zum Prompt Engineering: \emph{wie} man die Aufgabe formuliert). \\
+Linter & Programm, das Code automatisch auf Syntax- und Stilfehler prüft, ohne ihn auszuführen. \\
+Testsuite & Alle Tests eines Projekts. SWE-bench führt nur einen Teil davon aus. \\
+Differenzielles Testen & Man erzeugt Tests, die gezielt Unterschiede zwischen zwei Lösungen (Agent vs.\ Referenz) aufdecken. \\
+Pull Request (PR) & Vorschlag einer Codeänderung, der geprüft und dann ins Projekt übernommen (\enquote{gemergt}) wird. \\
+Sandbox & Abgeschottete Umgebung. Der Agent kann darin nichts am echten System kaputt machen. \\
+Human-in-the-Loop & Der Mensch ist an festen Stellen beteiligt (z.\,B. Plan freigeben). \\
+Automation Bias & Man vertraut automatischen Ergebnissen zu sehr und prüft sie zu wenig. \\
+\bottomrule
+\end{tabularx}
+
+%=====================================================================
+\section{Das Paper Abschnitt für Abschnitt}
+
+\subsection{Einleitung: Warum das Thema wichtig ist}
+\begin{itemize}
+\item Robbes et al.\ haben 128.018 GitHub-Projekte untersucht: \textbf{22,20\,\%} nutzen Coding-Agenten (vorsichtige Schätzung), bis zu \textbf{28,66\,\%} (hochgerechnet). Die Stichprobe steht aber nicht für die gesamte Softwareentwicklung.
+\item Die Arbeit verschiebt sich zum Spezifizieren, Überwachen und Prüfen (Dhanorkar et al.).
+\item Ob Agenten Zeit sparen und korrekten Code liefern, kann man \textbf{weder aus Benchmark-Erfolgen noch aus der Zahl der PRs} ablesen.
+\end{itemize}
+\textbf{Beitrag des Papers:} eine vergleichende Zusammenfassung (Synthese) entlang von Autonomie, Kontext und Qualitätssicherung. Die Prinzipien sind \emph{begründete Empfehlungen}, ihre gemeinsame Wirkung wird \emph{nicht} als bewiesen vorausgesetzt.
+
+\subsection{Vorgehen: Wie wir gearbeitet haben}
+\begin{enumerate}
+\item \textbf{Suche:} ACM Digital Library, IEEE Xplore und arXiv, dazu \enquote{Rückwärtssuche} (in den Literaturverzeichnissen der gefundenen Arbeiten weitersuchen).
+\item \textbf{Suchbegriffe:} \emph{coding agent, software engineering agent, agentic coding, LLM-based agent} kombiniert mit \emph{workflow, human-in-the-loop, autonomy, code review, testing, productivity, code quality}.
+\item \textbf{Auswahl:} Duplikate raus, dann Titel/Abstract prüfen, dann Volltext. Aufgenommen: ab 2024, Englisch oder Deutsch, mehrschrittig arbeitende, werkzeugnutzende LLM-Agenten, empirisch untersucht oder als System mit Evaluation, mit Bezug zu Workflow, Qualität oder Produktivität.
+\item \textbf{Auswertung:} Für jede Studie Design, Werkzeug, Population/Benchmark, Endpunkt und Einschränkungen gegenübergestellt.
+\end{enumerate}
+
+\begin{merke}
+Das Paper trennt drei \textbf{Evidenzarten}: kontrollierte Vergleiche, deskriptive Beobachtungen und qualitative Aussagen. Es rechnet \textbf{keine Effekte über Studien hinweg zusammen}, weil die Studien Verschiedenes messen. Beispiel aus dem Paper: Vergleicht man zwei Agenten, die sich gleichzeitig in Modell, Werkzeugen und Budget unterscheiden, weiß man nicht, ob der Unterschied an der Autonomie liegt.
+\end{merke}
+
+\textbf{Ehrliche Einschränkung:} Es ist eine \emph{narrative} Analyse, keine \emph{systematische} Vollerhebung, weil die Trefferzahlen der einzelnen Schritte nicht berichtet werden.
+
+\subsection{Befunde A: Autonomie, Mensch und Produktivität}
+Kernaussage: \textbf{Weniger aktive Arbeit heißt nicht kürzere Gesamtdauer.} Und: Verschiedene Studien messen Produktivität völlig unterschiedlich.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}p{2.2cm}LLL@{}}
+\toprule
+\textbf{Studie} & \textbf{Wer und womit?} & \textbf{Ergebnis} & \textbf{Warum vorsichtig?} \\
+\midrule
+Chen et al. & 20 Studierende; OpenHands vs.\ Copilot & Erfolg 25 \(\rightarrow\) 60\,\%; aktive Zeit 25,1 \(\rightarrow\) 12,5 min & Mit Laufzeit des Agenten 27,9 min; kleine Gruppe \\
+Cui et al. & 4.867 Entwickler in Firmen; Copilot-\emph{Vervollständigung} & +26,08\,\% erledigte Aufgaben (PRs/Woche) & Kein Agent! \\
+Becker et al. & 16 erfahrene Open-Source-Entwickler, eigene Projekte; meist Cursor & 19\,\% \emph{länger} mit KI; geschätzt 20\,\% schneller & Kleine Gruppe, Werkzeuge Anfang 2025 \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{beispiel}
+Bei Chen sitzt die Person mit Agent nur 12,5 Minuten aktiv an der Aufgabe statt 25,1. Aber der Agent arbeitet zwischendurch allein, und zusammen dauert es 27,9 Minuten. Das ist wie beim Geschirrspüler: Du arbeitest weniger als beim Abwaschen von Hand, aber fertig ist das Geschirr nicht schneller. Ob das ein Gewinn ist, hängt davon ab, ob du die Wartezeit sinnvoll nutzen kannst.
+\end{beispiel}
+
+\textbf{Warum Cui (+26\,\%) und Becker (+19\,\% Zeit) sich nicht widersprechen:} anderes Werkzeug (Vervollständigung vs.\ KI-Werkzeuge mit Chat/Agent), andere Personen (breite Belegschaft vs.\ Experten im eigenen Projekt), anderes Messmaß (Anzahl PRs vs.\ Bearbeitungszeit). Lehre: Werkzeugtyp, Population und Zeitmaß muss man beachten.
+
+\textbf{Menschliche Aufsicht} ist nicht ein einzelner Moment. Dhanorkar et al.\ unterscheiden aus 17 Interviews vier Formen: \emph{Vorgaben vorab} (z.\,B. Berechtigungen), \emph{gemeinsame Planung}, \emph{laufende Überwachung} und \emph{nachträgliches Review}. Sie beschreiben auch, dass Entwickler dem Plan des Agenten als Prüfhilfe vertrauen, aber: \textbf{Ein freigegebener Plan beweist keine korrekte Umsetzung.}
+
+\subsection{Befunde B: Kontext und Steuerung}
+\begin{itemize}
+\item \textbf{Was steht in Kontextdateien?} Chatlatanagulchai et al.\ (253 \texttt{CLAUDE.md}-Dateien): vor allem Build- und Run-Befehle, Implementierungsdetails, Architektur.
+\item \textbf{Wie verbreitet?} Mohsenimofidi et al.: in 466 von 10.000 Open-Source-Projekten (knapp 5\,\%). Gemessen wurde nur die Verbreitung, \emph{nicht}, ob es hilft.
+\item \textbf{Helfen sie?} Gloaguen et al.\ testen es auf SWE-bench Lite und ihrem eigenen Benchmark CTXBench:
+  \begin{itemize}
+  \item Im Vergleich zu \emph{keiner} Kontextdatei: kein signifikanter Gesamteffekt auf die Erfolgsrate.
+  \item Auf CTXBench: von Entwicklern geschriebene Dateien sind signifikant besser als von einer KI generierte, aber nicht signifikant besser als gar keine Datei.
+  \item KI-generierte Dateien kosten mehr: \textbf{+20\,\%} (Lite) bzw.\ \textbf{+23\,\%} (CTXBench) Rechenkosten und \textbf{+2,45} bzw.\ \textbf{+3,92} Schritte im Mittel.
+  \end{itemize}
+\end{itemize}
+
+\begin{beispiel}
+Eine KI-generierte Kontextdatei ist wie eine lange Einarbeitungsmappe, die der Praktikant pflichtbewusst komplett liest. Er braucht dafür länger, löst die Aufgabe aber nicht häufiger. Hilfreich ist nur, was er sonst nicht herausfinden kann, z.\,B. \enquote{Tests startest du mit \texttt{make test-integration}}.
+\end{beispiel}
+
+\begin{merke}
+Erfolg, Schritte und Kosten sind \textbf{getrennte Endpunkte}. Die Empfehlung der Autoren: nur konkrete, sonst nicht verfügbare Anforderungen ergänzen. Ein optimaler Umfang von Kontext ist damit \emph{nicht} bestimmt.
+\end{merke}
+
+\subsection{Befunde C: Verifikation, Sicherheit und Integration}\label{sec:verifikation}
+Kernaussage: \textbf{Bestandene Tests belegen keine korrekte Lösung}, und auch angenommene PRs brauchen Nacharbeit.
+
+\paragraph{Tests sind nur ein Näherungsmaß.}
+\begin{itemize}
+\item \textbf{AutoCodeRover} (Zhang et al.): Von 78 Patches, die die Tests bestanden, waren bei manueller Prüfung nur \textbf{51 korrekt (65,4\,\%)}. Diese Zahl stammt aus dem \emph{@3-Versuch} und darf nicht mit der Erfolgsrate eines einzelnen Laufs (@1) vermischt werden.
+\item \textbf{Aleithan et al.} (SWE-Bench+): In manchen Aufgaben steht die Lösung schon im Issue-Text oder in Kommentaren, und manche Tests sind zu schwach.
+\item \textbf{Wang et al.}: 877 testbestehende Patches auf SWE-bench Verified untersucht.
+  \begin{itemize}
+  \item \textbf{7,8\,\%} scheitern, wenn man die \emph{vollständige} Testsuite laufen lässt (SWE-bench führt nur einen Teil aus).
+  \item Bei \textbf{260 Patches (29,6\,\%)} zeigen differenzielle Tests ein anderes Verhalten als die Referenzlösung.
+  \item Aber: Anders ist nicht automatisch falsch. Von 77 manuell geprüften verdächtigen Patches waren \textbf{22 falsch, 4 korrekt, 51 unklar}.
+  \end{itemize}
+\end{itemize}
+
+\begin{beispiel}
+Tests sind wie eine Führerscheinprüfung auf einer festen Strecke. Wer sie besteht, kann auf dieser Strecke fahren, aber das heißt nicht, dass er überall sicher fährt. Eine schwache Prüfung (wenige, ungenaue Tests) lässt auch schlechte Fahrer durch.
+\end{beispiel}
+
+\paragraph{Was nachweislich hilft (eng begrenzt).}
+\begin{itemize}
+\item \textbf{Linter in SWE-agent} (Yang et al.): Mit Linter, der fehlerhafte Änderungen sofort ablehnt, werden \textbf{18 statt 15\,\%} der Aufgaben auf SWE-bench Lite gelöst. Das ist eine \emph{Ablation}, also ein sauberer Einzelnachweis.
+\item \textbf{Cemri et al.}: Eine veränderte ChatDev-Struktur steigert den Erfolg auf 32 Aufgaben von \textbf{25,0 auf 40,6\,\%} (+15,6 Prozentpunkte). Aber: Es wurden \emph{mehrere Dinge gleichzeitig} geändert, also kein isolierter Beweis, dass eine abschließende Zielprüfung wirkt.
+\end{itemize}
+
+\paragraph{Sicherheit ist ein eigener Endpunkt.}
+Sajadi et al.\ finden Sicherheitslücken in Patches mehrerer Agenten. Weil sich Modelle und Bearbeitungsmechanismen unterscheiden, kann man das \textbf{nicht ursächlich dem Autonomiegrad zuschreiben}. Bei Llama-Patches hängen mehr geänderte Dateien mit mehr Sicherheitsproblemen zusammen, dass kleinere Patches schützen, wurde aber nicht gemessen.
+
+\paragraph{Integration in echte Projekte.}
+\begin{itemize}
+\item \textbf{Watanabe et al.}: 475 von 567 Claude-Code-PRs wurden gemergt, davon \textbf{214 (45,1\,\%)} vorher überarbeitet. Häufigster Grund: Bugfixes (47,7\,\%). Der Umfang der Überarbeitung unterscheidet sich nicht signifikant von menschlichen PRs, aber das beweist nicht, dass der Aufwand gleich ist.
+\item \textbf{Li et al.}: Angenommene Codex-PRs werden schneller geschlossen. Das misst aber weder Arbeitszeit noch Durchsatz. Bei 58,2\,\% der Agenten-PRs (und 75,3\,\% der menschlichen) gibt es keine sichtbare Review-Aktion auf GitHub, wie gründlich geprüft wurde, ist also unbekannt.
+\end{itemize}
+
+\subsection{Die fünf Gestaltungsprinzipien}
+Wichtig vorab: Die Prinzipien verbinden die Befunde zu einem \emph{vorgeschlagenen} Workflow. Jede \enquote{Vorschlag}-Regel ist eine \textbf{eigene Empfehlung, keine belegte Wirkung}.
+
+\begin{center}
+\begin{tikzpicture}[node distance=0.35cm,
+  p/.style={draw=akzent,fill=akzent!8,rounded corners=2pt,align=center,text width=2.5cm,minimum height=1.4cm,font=\small},
+  arr/.style={-{Stealth[length=2mm]},thick,akzent}]
+\node[p] (p1) {\textbf{P1}\\Planung\\gemeinsam prüfen};
+\node[p,right=of p1] (p2) {\textbf{P2}\\Autonomie nach\\Risiko staffeln};
+\node[p,right=of p2] (p3) {\textbf{P3}\\Kontext gezielt\\ergänzen};
+\node[p,right=of p3] (p4) {\textbf{P4}\\Mehrstufig\\verifizieren};
+\node[p,right=of p4] (p5) {\textbf{P5}\\Überprüfbar\\integrieren};
+\draw[arr] (p1)--(p2); \draw[arr] (p2)--(p3); \draw[arr] (p3)--(p4); \draw[arr] (p4)--(p5);
+\node[below=0.2cm of p2,font=\footnotesize\itshape] {vor der Arbeit};
+\node[below=0.2cm of p4,font=\footnotesize\itshape] {nach der Arbeit};
+\end{tikzpicture}
+\end{center}
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}p{2.6cm}LLL@{}}
+\toprule
+\textbf{Prinzip} & \textbf{Handlungsregel (Vorschlag)} & \textbf{Woher kommt die Idee?} & \textbf{Was ist \emph{nicht} belegt?} \\
+\midrule
+P1 Planung gemeinsam prüfen & Bei unklaren Anforderungen Ziel und Akzeptanzkriterien vor der Umsetzung abstimmen & HULA und Interviewstudie zeigen: so eine Beteiligung ist praktisch machbar & Zeit- oder Qualitätseffekt; ein Plan ersetzt kein Code-Review \\
+P2 Autonomie nach Risiko und Prüfbarkeit staffeln & Sicherheitskritische oder schwer rückgängig zu machende Änderungen menschlich freigeben & Sicherheits- und Aufsichtsbefunde; OpenHands-Sandbox & Kausaler Effekt; Sandbox macht den Code nicht sicher \\
+P3 Kontext gezielt ergänzen & Fehlende Build-, Test- und Projektanforderungen gezielt ergänzen & Bestandsanalysen und Kontextversuche & Dass kürzere Dateien die Erfolgsrate allgemein steigern \\
+P4 Mehrstufig und am Auftrag verifizieren & Bestandene Tests durch zusätzliche, anforderungsbezogene Prüfungen ergänzen & Linter-Ablation, Wang et al., Cemri et al. & Dass die Kombination menschliche Nacharbeit senkt \\
+P5 Überprüfbar integrieren & Änderungen sachlich abgrenzen und vor dem Merge nachvollziehbar prüfen & Revisions- und Sicherheitsbefunde & Optimale PR-Größe; Nettozeitgewinn \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\paragraph{P4 genauer:} statische Prüfungen (z.\,B. Linter) + aufgabenbezogene Tests + vor der Integration die \emph{vollständige} Testsuite. Zusätzliche Tests müssen die Anforderung über die schon bestandenen Fälle hinaus prüfen, und ob der Gesamtauftrag erfüllt ist, wird gesondert beurteilt.
+
+\paragraph{P5 genauer:} kleine, sachlich abgegrenzte PRs, Beteiligung des Agenten dokumentiert, menschliches Review und Sicherheitsprüfung je nach Risiko.
+
+\subsection{Diskussion: Was trägt die Evidenz?}
+\begin{itemize}
+\item Die \textbf{stärksten Belege} gibt es für eng begrenzte Maßnahmen (z.\,B. Linter).
+\item \textbf{Nutzerexperimente} zeigen: Weniger aktive Arbeit garantiert keine kürzere Gesamtdauer.
+\item \textbf{Repository-Analysen} sind praxisnah, zeigen aber keine Ursachen, weil Aufgaben und Auswahl sich unterscheiden.
+\item Akzeptanz, Testbestehen und Änderungsumfang \textbf{ersetzen nicht} die Messung von Wartbarkeit, Sicherheit oder Zeit.
+\end{itemize}
+
+\paragraph{Grenzen der eigenen Arbeit.}
+Narrative Auswahl (nicht vollständig, nicht voll reproduzierbar); wichtige Befunde stammen aus Preprints; Modelle, Agentenversionen und Budgets unterscheiden sich; SWE-bench enthält nur Python-Projekte; 17 Interviews sind keine repräsentative Häufigkeitsschätzung.
+
+\paragraph{Der zentrale Zielkonflikt.}
+Mehr Prüfen kostet Zeit und Geld. Es lohnt sich nur, wenn die zusätzlichen Prüfschritte \textbf{genug Fehler finden}, um den Aufwand zu rechtfertigen.
+
+\paragraph{Vorgeschlagener nächster Forschungsschritt.}
+Ein kontrollierter Vergleich \textbf{mit und ohne menschliche Planfreigabe}, bei gleichem Agenten, gleichem Modell und gleichem Budget. Getrennt gemessen: aktive menschliche Zeit, Gesamtdauer, Inferenzkosten, Review-Aufwand, funktionale Fehler und Sicherheitsbefunde; später ergänzt um Wartungsaufgaben.
+
+\subsection{Fazit}
+\begin{kernbox}[Die Antwort auf die Forschungsfrage]
+\textbf{Teil 1:} Aus der Literatur lassen sich fünf begründete Prinzipien ableiten.\\
+\textbf{Teil 2:} Für einzelne, eng begrenzte Maßnahmen gibt es kontrollierte Belege. Die Wirkung der fünf Prinzipien als Gesamtworkflow und ihre Übertragbarkeit sind nicht nachgewiesen.\\[3pt]
+Also: \textbf{Konkrete Empfehlungen sind möglich, ein allgemeiner Gewinn an Codequalität oder Produktivität folgt daraus nicht.} Dafür braucht es vergleichbare Endpunkte sowie kontrollierte und langfristige Studien.
+\end{kernbox}
+
+%=====================================================================
+\section{Die wichtigsten Studien verständlich erklärt}
+Hier stehen die Studien, die auf den Folien vorkommen, ausführlich. Die übrigen folgen danach kurz.
+
+\subsection{Motivation und Hintergrund}
+\studie{Robbes et al. (2026): \enquote{Agentic much?}}{ACM TOSEM}
+{128.018 GitHub-Projekte nach Spuren von Agenten durchsucht, etwa Konfigurationsdateien oder Co-Author-Einträge in Commits.}
+{22,20\,\% der Projekte nutzen Agenten (vorsichtig), bis zu 28,66\,\% (hochgerechnet).}
+{Belegt, dass das Thema praktisch relevant ist (Einleitung).}
+{Agenten ohne Spuren werden übersehen; eine Konfigurationsdatei heißt noch keine intensive Nutzung; nicht repräsentativ für die gesamte Softwareentwicklung.}
+
+\studie{Takerngsaksiri et al. (2025): HULA}{ICSE-SEIP, Atlassian}
+{Agent in Atlassians JIRA eingebaut: Ein Planungs-Agent macht einen Plan, der Mensch prüft ihn, dann schreibt ein Coding-Agent Code, den der Mensch wieder prüft.}
+{Im Einsatz wurden 82\,\% der Pläne freigegeben; von den daraus entstandenen PRs wurden 59\,\% gemergt. Detaillierte Aufgabenbeschreibungen sind wichtig.}
+{Zeigt, dass gemeinsame Planung praktisch funktioniert (Grundlage für P1).}
+{Ein Unternehmen, Zeitersparnis nur per Umfrage, Autoren aus der Firma.}
+
+\studie{Dhanorkar et al. (2026): Aufsicht in der Praxis}{arXiv-Preprint, Microsoft}
+{17 erfahrene Entwickler interviewt, wie sie Agenten beaufsichtigen.}
+{Vier Formen der Aufsicht: Vorgaben vorab, gemeinsame Planung, laufende Überwachung, nachträgliches Review. Beim Prüfen nutzen Entwickler Abkürzungen (Heuristiken), etwa: dem Plan vertrauen, grüne Tests als Beweis nehmen, nur überfliegen.}
+{Liefert das Vokabular für Aufsicht und stützt P1 und P2. Zeigt: Ein Plan ist keine Garantie.}
+{Qualitativ, klein, keine Messung von Fehlerraten oder Wirkungen.}
+
+\subsection{Produktivität}
+\studie{Chen et al. (2026): \enquote{Code with me or for me?}}{CHI '26}
+{20 Studierende lösen realistische Programmieraufgaben einmal mit Copilot und einmal mit dem Agenten OpenHands.}
+{Mit OpenHands 60\,\% statt 25\,\% korrekt gelöst. Aktive Zeit bei erfolgreichen Aufgaben 12,5 statt 25,1 min, mit Laufzeit des Agenten aber 27,9 min.}
+{Kernbeleg für \enquote{weniger aktive Arbeit ist nicht kürzere Gesamtdauer}.}
+{Kleine Gruppe von Studierenden; Erfolgsquoten unterscheiden sich, daher Zeitvergleich schwierig; Autoren aus dem OpenHands-Umfeld.}
+
+\studie{Becker et al. (2025): METR-Studie}{arXiv-Preprint}
+{16 erfahrene Open-Source-Entwickler bearbeiten 246 echte Aufgaben in ihren eigenen Projekten. Per Zufall wird entschieden, ob KI erlaubt ist (meist Cursor).}
+{Mit KI dauerten Aufgaben 19\,\% länger. Die Entwickler glaubten danach aber, 20\,\% Zeit gespart zu haben.}
+{Starker Gegenbefund: Gefühlte Produktivität ist nicht gemessene Produktivität.}
+{Sehr spezielle Gruppe (Experten in vertrauten Projekten), kleine Stichprobe, Werkzeuge von Anfang 2025.}
+
+\studie{Cui et al. (2026): Drei Feldexperimente}{Management Science}
+{In drei Unternehmen bekamen 4.867 Entwickler per Zufall Zugang zu Copilot-Codevervollständigung.}
+{26,08\,\% mehr erledigte Aufgaben (gemessen als PRs pro Woche), Standardfehler 10,3\,\%.}
+{Zeigt, dass ein anderes Werkzeug und ein anderes Maß zu ganz anderen Zahlen führen.}
+{\textbf{Kein Agent!} Nur als angrenzender Vergleich im Paper.}
+
+\subsection{Kontext}
+\studie{Gloaguen et al. (2026): \enquote{Evaluating AGENTS.md}}{ICLR-2026-Workshop}
+{Agenten lösen Aufgaben in drei Varianten: ohne Kontextdatei, mit KI-generierter Datei, mit von Entwicklern geschriebener Datei. Getestet auf SWE-bench Lite und dem eigenen Benchmark CTXBench.}
+{Kein signifikanter Gesamteffekt auf die Erfolgsrate. KI-generierte Dateien erhöhen Kosten (+20/+23\,\%) und Schritte (+2,45/+3,92).}
+{Grundlage für P3: nur gezielt ergänzen.}
+{Misst nur die Erfolgsrate, nicht, ob Konventionen eingehalten werden oder der Code wartbarer wird.}
+
+\subsection{Verifikation und Integration}
+\studie{Jimenez et al. (2024): SWE-bench}{ICLR}
+{Benchmark aus echten GitHub-Issues in 12 Python-Projekten; Prüfung über die Tests des Original-Fixes.}
+{Wurde zum Standardtest für Coding-Agenten.}
+{Fast alle technischen Befunde im Paper beruhen darauf.}
+{Nur Python, nur populäre Projekte; Qualität hängt an den Tests.}
+
+\studie{Zhang et al. (2024): AutoCodeRover}{ISSTA}
+{Agent, der Code als Programmstruktur durchsucht und Issues repariert. Testbestehende Patches wurden zusätzlich von Hand geprüft.}
+{Nur 51 von 78 testbestehenden Patches waren wirklich korrekt (65,4\,\%, im @3-Versuch).}
+{Zeigt: Testbestehen \(\neq\) Korrektheit.}
+{@3-Wert nicht mit @1-Erfolgsrate verwechseln; nur Benchmark.}
+
+\studie{Wang, Pradel, Liu (2026): \enquote{Solved issues really solved?}}{ICSE}
+{877 testbestehende Patches von Agenten auf SWE-bench Verified nachgeprüft: mit voller Testsuite und mit differenziellen Tests gegen die Referenz.}
+{7,8\,\% scheitern an der vollen Testsuite; 29,6\,\% verhalten sich anders als die Referenz; von 77 manuell geprüften: 22 falsch, 4 korrekt, 51 unklar.}
+{Grundlage für P4: volle Testsuite und zusätzliche Prüfungen gegen die Anforderung.}
+{Abweichung ist kein Beweis für einen Fehler; nur Python.}
+
+\studie{Yang et al. (2024): SWE-agent}{NeurIPS}
+{Agent mit einer speziell für Sprachmodelle gestalteten Werkzeugschnittstelle. In einer Ablation wurde der Linter weggelassen.}
+{Mit Linter 18\,\%, ohne 15\,\% gelöste Aufgaben auf SWE-bench Lite.}
+{Stärkster sauberer Einzelbeleg im Paper (P4).}
+{Nur Benchmark, kleiner Effekt, ältere Modelle.}
+
+\studie{Cemri et al. (2025): \enquote{Why do multi-agent LLM systems fail?}}{NeurIPS, Datasets \& Benchmarks}
+{Fehler in Systemen mit mehreren Agenten analysiert und eine Fehlertaxonomie (MAST) erstellt; außerdem Eingriffe getestet.}
+{Veränderte ChatDev-Struktur: 25,0 \(\rightarrow\) 40,6\,\% auf 32 Aufgaben.}
+{Stützt P4 (Erfüllung des Gesamtauftrags gesondert prüfen).}
+{Mehrere Änderungen gleichzeitig, kein isolierter Effekt; kleine Programme.}
+
+\studie{Watanabe et al. (2026): Claude-Code-PRs auf GitHub}{ACM TOSEM}
+{567 mit Claude Code erstellte PRs aus Open-Source-Projekten ausgewertet.}
+{475 gemergt, davon 214 (45,1\,\%) vorher überarbeitet, am häufigsten wegen Bugfixes.}
+{Grundlage für P5: Review und Nacharbeit bleiben nötig.}
+{Nur ein Werkzeug, nur öffentlich erkennbare PRs.}
+
+\subsection{Weitere Arbeiten im Korpus (kurz)}
+\begin{tabularx}{\textwidth}{@{}p{3.8cm}L@{}}
+\toprule
+\textbf{Arbeit} & \textbf{Rolle im Paper} \\
+\midrule
+Liu et al.\ (2024), Survey & Definition des Coding-Agenten (Planung, Gedächtnis, Wahrnehmung, Aktion). \\
+Xia et al.\ (2025), Agentless & Beispiel für geringe Autonomie: fester Ablauf aus Lokalisieren, Reparieren, Validieren. \\
+Wang et al.\ (2025), OpenHands & Plattform mit Docker-Sandbox; Agent in mehreren anderen Studien. \\
+Chatlatanagulchai et al.\ (2025) & 253 \texttt{CLAUDE.md}-Dateien: was typischerweise drinsteht. \\
+Mohsenimofidi et al.\ (2026) & 466 von 10.000 Projekten mit Kontextdatei; nur Verbreitung. \\
+Aleithan et al.\ (2024), SWE-Bench+ & Lösungen im Issue-Text und schwache Tests als Benchmark-Risiken. \\
+Sajadi et al.\ (2025) & Sicherheitslücken in Agenten-Patches; keine kausale Aussage zum Autonomiegrad. \\
+Li et al.\ (2025), AIDev & Schnelle Schließzeiten, häufig keine sichtbare Review-Aktion. \\
+\bottomrule
+\end{tabularx}
+
+%=====================================================================
+\section{Wie hängen Befunde und Prinzipien zusammen?}
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}LcL@{}}
+\toprule
+\textbf{Befund} & & \textbf{führt zu} \\
+\midrule
+Aufsicht hat mehrere Formen; Plan als Prüfhilfe ist riskant (Dhanorkar); Planfreigabe ist machbar (HULA) & \(\rightarrow\) & \textbf{P1}: Ziel und Akzeptanzkriterien vorab klären, Review trotzdem nötig \\
+Sicherheitslücken in Agenten-Patches (Sajadi); Sandbox schützt nur das System (OpenHands) & \(\rightarrow\) & \textbf{P2}: Kritisches und Unumkehrbares menschlich freigeben \\
+Kontextdateien: keine messbare Erfolgssteigerung, aber mehr Kosten (Gloaguen) & \(\rightarrow\) & \textbf{P3}: nur Fehlendes gezielt ergänzen \\
+Tests übersehen Fehler (AutoCodeRover, Wang); Linter hilft (SWE-agent) & \(\rightarrow\) & \textbf{P4}: mehrstufig prüfen, volle Testsuite, Zusatztests \\
+45\,\% der gemergten Agenten-PRs überarbeitet (Watanabe); Sicherheitsrisiken & \(\rightarrow\) & \textbf{P5}: kleine PRs, nachvollziehbares Review \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+%=====================================================================
+\section{Typische Denkfehler und wie man es richtig sagt}
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}>{\color{rot}}L>{\color{gruen!60!black}}L@{}}
+\toprule
+\textbf{Falsch} & \textbf{Richtig} \\
+\midrule
+\enquote{Agenten machen 35\,\% produktiver.} & Erfolgsquote +35 Prozentpunkte (25 \(\rightarrow\) 60\,\%), bei 20 Studierenden im Labor. \\
+\enquote{Agenten halbieren die Arbeitszeit.} & Die \emph{aktive} Zeit halbiert sich; mit Agentenlaufzeit 27,9 min. \\
+\enquote{Kontextdateien bringen nichts.} & Kein \emph{signifikanter} Gesamteffekt auf die Erfolgsrate; das ist kein Beweis gleicher Leistung. \\
+\enquote{29,6\,\% der Patches sind falsch.} & 29,6\,\% verhalten sich anders; von 77 geprüften waren 22 falsch, 51 unklar. \\
+\enquote{Mehr Autonomie erzeugt mehr Sicherheitslücken.} & Lücken bei mehreren Agenten, aber keine kausale Zuschreibung zum Autonomiegrad möglich. \\
+\enquote{Eine Zielprüfung bringt +15,6\,\%.} & +15,6 Prozentpunkte durch mehrere Änderungen gleichzeitig. \\
+\enquote{Eine Sandbox macht den Agenten sicher.} & Sie schützt das System, nicht die Qualität des erzeugten Codes. \\
+\enquote{Unsere Prinzipien verbessern die Qualität.} & Begründete Empfehlungen; Wirkung als Gesamtworkflow nicht nachgewiesen. \\
+\enquote{Wir haben eine systematische Review gemacht.} & Narrative Analyse; Trefferzahlen nicht berichtet. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+%=====================================================================
+\section{Prüfungsfragen mit Antworten}
+
+\subsection*{Zur Methodik}
+\frage{Warum keine systematische Literaturanalyse?}{Für ein Short Paper wurde gezielt narrativ ausgewählt. Suche, Begriffe und Kriterien sind dokumentiert, die Trefferzahlen pro Schritt aber nicht, deshalb beanspruchen wir keine reproduzierbare Vollerhebung. Das ist im Paper offen als Grenze benannt.}
+
+\frage{Warum keine gemeinsame Effektgröße über alle Studien?}{Die Studien messen Verschiedenes (Erfolgsrate, aktive Zeit, Gesamtdauer, PRs pro Woche, Kosten), mit unterschiedlichen Modellen, Budgets und Personen. Eine Zahl daraus wäre irreführend. Deshalb sortieren wir nach Evidenzart.}
+
+\frage{Viele Quellen sind Preprints. Ist das ein Problem?}{Ja, das ist eine Einschränkung. Das Feld ist sehr schnell, wichtige Nutzer- und Sicherheitsbefunde (Becker, Dhanorkar, Sajadi) liegen nur als Preprint vor. Wo es eine begutachtete Fassung gibt, zitieren wir diese, und der Status ist bei der Gewichtung zu beachten.}
+
+\frage{Warum ist Cui drin, obwohl es um Codevervollständigung geht?}{Bewusst nur als angrenzender Vergleich. Die Studie zeigt, dass Werkzeugtyp und Messgröße das Ergebnis stark prägen, und das steht so auch in der Tabelle.}
+
+\frage{Gibt es Interessenkonflikte?}{Ja: Chen et al.\ stammen aus dem OpenHands-Umfeld, HULA von Atlassian, Dhanorkar et al.\ von Microsoft. Das spricht für vorsichtige Einordnung. (Im Paper nicht eigens genannt, kann man ehrlich ergänzen.)}
+
+\frage{Sind die Ergebnisse bei den schnellen Modellfortschritten noch aktuell?}{Absolute Zahlen veralten schnell, weil viele Studien Modelle von 2024 oder Anfang 2025 nutzen. Die methodischen Lehren bleiben: Testbestehen ist nicht Korrektheit, aktive Zeit ist nicht Gesamtdauer.}
+
+\subsection*{Zum Inhalt}
+\frage{Widersprechen sich Cui (+26\,\%) und Becker (19\,\% langsamer)?}{Nein, nicht direkt. Anderes Werkzeug (Vervollständigung vs.\ Chat/Agent), andere Personen (breite Belegschaft vs.\ Experten im eigenen Projekt), anderes Maß (PRs pro Woche vs.\ Bearbeitungszeit).}
+
+\frage{Spart der Agent bei Chen Zeit?}{Die aktive Zeit halbiert sich ungefähr, die Gesamtdauer nicht (27,9 vs.\ 25,1 min). Außerdem gelten die Zeiten nur für erfolgreiche Aufgaben, und die Erfolgsquoten unterscheiden sich.}
+
+\frage{Warum glaubten die Entwickler bei Becker, schneller zu sein?}{Selbsteinschätzungen sind unzuverlässig. Die Autoren nennen u.\,a.\ Optimismus, die hohe Vertrautheit mit dem eigenen Projekt, große Codebasen, wenig zuverlässige KI-Ausgaben und fehlendes implizites Projektwissen. Folge: Messen statt fragen.}
+
+\frage{Soll man keine \texttt{CLAUDE.md} schreiben?}{Nicht pauschal. Es gibt keinen signifikanten Gesamteffekt auf die Erfolgsrate, aber höhere Kosten bei KI-generierten Dateien. Deshalb P3: nur ergänzen, was der Agent sonst nicht findet. Ob Konventionen besser eingehalten werden, wurde nicht gemessen.}
+
+\frage{Warum reichen grüne Tests nicht?}{Tests prüfen nur, was sie abdecken. AutoCodeRover: 51 von 78 korrekt. Wang: 7,8\,\% scheitern an der vollen Suite, 29,6\,\% verhalten sich anders. Darum P4.}
+
+\frage{Ist weniger Autonomie also besser (Agentless)?}{Agentless zeigt, dass ein fester Ablauf konkurrenzfähig sein kann. Ein sauberer Autonomieeffekt folgt nicht, weil sich auch Modell und Budget unterscheiden. Deshalb empfehlen wir \emph{risikogerechte}, nicht minimale Autonomie.}
+
+\frage{Warum ist der Linter-Befund stärker als der Cemri-Befund?}{Beim Linter wurde nur ein Teil verändert (Ablation), also ist der Effekt dem Linter zuzuschreiben. Bei Cemri wurden mehrere Dinge zugleich geändert.}
+
+\frage{Schnell geschlossene Agenten-PRs (Li): ist das Produktivität?}{Nein. Die Schließzeit misst weder Arbeitszeit noch Durchsatz, und oft fehlt eine sichtbare Review-Aktion. Über die Prüftiefe sagt das nichts.}
+
+\frage{Warum kleine PRs, wenn Agenten-Commits in der Praxis eher groß sind?}{Gerade deshalb: Kleine, abgegrenzte Änderungen lassen sich nachvollziehbar prüfen. Die optimale Größe hat aber niemand bestimmt.}
+
+\subsection*{Transfer}
+\frage{Was würdet ihr einem Unternehmen raten?}{Die fünf Handlungsregeln anwenden und vor allem den Nutzen im eigenen Team messen: aktive Zeit, Gesamtdauer, Review-Aufwand und Fehler getrennt, statt sich auf Gefühl oder Benchmarks zu verlassen.}
+
+\frage{Wie würdet ihr den vorgeschlagenen Versuch aufbauen?}{Gleiche Aufgaben, gleicher Agent, gleiches Modell und Budget, zufällige Zuteilung zu \enquote{mit} oder \enquote{ohne} Planfreigabe. Getrennt erfassen: aktive Zeit, Gesamtdauer, Kosten, Review-Aufwand, funktionale Fehler, Sicherheitsbefunde; später Wartungsaufgaben am selben Code.}
+
+\frage{Ist \enquote{Evidenzgrenzen} nicht ein schwaches Ergebnis?}{Nein. Gerade bei einem Hype-Thema ist es ein Beitrag zu zeigen, welche Aussagen die Literatur trägt und welche Messgrößen künftige Studien trennen müssen.}
+
+\frage{Und wenn man eine Frage nicht beantworten kann?}{Ehrlich sagen, dass die Studie das nicht gemessen hat oder dass es außerhalb des Korpus liegt, und auf eine Kernaussage zurückführen. Das passt zur Grundhaltung des Papers.}
+
+%=====================================================================
+\section{Alle wichtigen Zahlen auf einen Blick}
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}p{4.6cm}Lp{2.6cm}@{}}
+\toprule
+\textbf{Zahl} & \textbf{Bedeutung} & \textbf{Quelle} \\
+\midrule
+21 & ausgewertete Arbeiten (2024--2026) & Paper \\
+128.018 \textbullet\ 22,20\,\% \textbullet\ 28,66\,\% & Projekte \textbullet\ Adoption vorsichtig \textbullet\ obere Schätzung & Robbes \\
+25 \(\rightarrow\) 60\,\% & Erfolg Copilot \(\rightarrow\) OpenHands & Chen \\
+25,1 \(\rightarrow\) 12,5 min \textbullet\ 27,9 min & aktive Zeit \textbullet\ inklusive Agentenlaufzeit & Chen \\
++26,08\,\% (SE 10,3\,\%) & erledigte Aufgaben, 4.867 Entwickler, Vervollständigung & Cui \\
++19\,\% \textbullet\ 20\,\% gefühlt & längere Bearbeitungszeit \textbullet\ geschätzte Ersparnis; 16 Personen, 246 Aufgaben & Becker \\
+17 & Interviews & Dhanorkar \\
+253 & \texttt{CLAUDE.md}-Dateien & Chatlatanagulchai \\
+466 von 10.000 & Projekte mit Kontextdatei & Mohsenimofidi \\
++20 / +23\,\% \textbullet\ +2,45 / +3,92 & Kosten \textbullet\ Schritte (Lite / CTXBench) & Gloaguen \\
+51 von 78 = 65,4\,\% & korrekte testbestehende Patches (@3) & AutoCodeRover \\
+877 \textbullet\ 7,8\,\% \textbullet\ 29,6\,\% & Patches \textbullet\ scheitern an voller Suite \textbullet\ Verhaltensabweichung & Wang 2026 \\
+77 \(\rightarrow\) 22 / 4 / 51 & geprüft \(\rightarrow\) falsch / korrekt / unklar & Wang 2026 \\
+18 vs.\ 15\,\% & mit / ohne Linter & SWE-agent \\
+25,0 \(\rightarrow\) 40,6\,\% & ChatDev-Umbau, 32 Aufgaben & Cemri \\
+475 / 567 \textbullet\ 214 = 45,1\,\% & gemergt \textbullet\ davon überarbeitet & Watanabe \\
+58,2\,\% / 75,3\,\% & ohne sichtbare Review-Aktion: Agent / Mensch & Li \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\vfill
+\begin{merke}
+Wenn du nur drei Dinge behältst:
+\begin{enumerate}
+\item Weniger aktive Arbeit ist keine kürzere Gesamtdauer.
+\item Bestandene Tests sind keine korrekte Lösung.
+\item Die Prinzipien sind begründete Empfehlungen, keine bewiesenen Wirkungen.
+\end{enumerate}
+\end{merke}
+
+\end{document}
